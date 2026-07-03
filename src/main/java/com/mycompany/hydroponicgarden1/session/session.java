@@ -4,7 +4,7 @@
  */package com.mycompany.hydroponicgarden1.session;
 
 import com.mycompany.hydroponicgarden1.model.User;
-//import com.mycompany.hydroponicgarden1.model.HydroponicSystem;
+import com.mycompany.hydroponicgarden1.model.HydroponicSystem;
 
 public class session {
 
@@ -12,7 +12,7 @@ public class session {
     private static User currentUser;
 
     // Sistema seleccionado
-   // private static HydroponicSystem currentSystem;
+   private static HydroponicSystem currentSystem;
 
     // ================= USER =================
     public static void setCurrentUser(User user) {
@@ -24,17 +24,17 @@ public class session {
     }
 
     // ================= SYSTEM =================
-  /*  public static void setCurrentSystem(HydroponicSystem system) {
+   public static void setCurrentSystem(HydroponicSystem system) {
         currentSystem = system;
     }
 
     public static HydroponicSystem getCurrentSystem() {
         return currentSystem;
-    } */
+    } 
 
     // ================= LOGOUT =================
     public static void logout() {
         currentUser = null;
-       // currentSystem = null;
+        currentSystem = null;
     }
 }
