@@ -11,6 +11,8 @@ package com.mycompany.hydroponicgarden1;
 public class HydroponicGarden1 {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+         java.awt.EventQueue.invokeLater(() -> {
+            new Login().setVisible(true);
+        });
     }
 }
