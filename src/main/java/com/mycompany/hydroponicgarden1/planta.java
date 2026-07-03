@@ -33,7 +33,7 @@ public class planta extends javax.swing.JFrame {
      */
     public planta() {
         initComponents();
-//        configurarMenu();
+       configurarMenu();
         getContentPane().setBackground(Color.WHITE);
         jLabel1.setForeground(java.awt.Color.decode("#3A5A40"));
         jLabel5.setForeground(java.awt.Color.decode("#3A5A40"));
@@ -122,7 +122,7 @@ public class planta extends javax.swing.JFrame {
 
         timer.start();
     }
-  /* private void configurarMenu() {
+   private void configurarMenu() {
 
     plantBtn1.addActionListener(e -> {
         if (menuAbierto) animarMenu();
@@ -162,7 +162,7 @@ public class planta extends javax.swing.JFrame {
         new Login().setVisible(true);
         dispose();
     });
-}*/
+}
     private void cargarTabla() {
 
     HydroponicSystem system = session.getCurrentSystem();

@@ -28,8 +28,8 @@ public class Inicio extends javax.swing.JFrame {
         getContentPane().setBackground(new Color(233, 225, 225));
         
         
-        /*panelMenu.setLocation(-anchoMenu,55);
-        configurarMenu();*/
+        panelMenu.setLocation(-anchoMenu,55);
+        configurarMenu();
         
         try {
 
@@ -97,7 +97,7 @@ public class Inicio extends javax.swing.JFrame {
 
         timer.start();
     }
-    /*private void configurarMenu() {
+    private void configurarMenu() {
 
     homeBtn1.addActionListener(e -> {
         if (menuAbierto) animarMenu();
@@ -137,7 +137,7 @@ public class Inicio extends javax.swing.JFrame {
         new Login().setVisible(true);
         dispose();
     });
-}*/
+}
 
     /**
      * This method is called from within the constructor to initialize the form.

@@ -29,7 +29,7 @@ public class InterfazChida extends JFrame {
     private final Font labelFont = new Font("Segoe UI", Font.PLAIN, 13);
     private final Font fieldFont = new Font("Segoe UI", Font.PLAIN, 13);
 
-    // --- ATRIBUTOS DE CLASE PARA MANEJAR LOS DATOS (segun tabla monitoring) ---
+    
     private JTextField txtIdMonitoring;
     private JTextField txtWaterTemperature;
     private JTextField txtAmbientTemperature;
@@ -161,10 +161,10 @@ public class InterfazChida extends JFrame {
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-//        btn.addActionListener(e -> navegar(texto));
+       btn.addActionListener(e -> navegar(texto));
         return btn;
     }
-   /* private void navegar(String opcion) {
+    private void navegar(String opcion) {
 
     switch (opcion) {
 
@@ -208,7 +208,7 @@ public class InterfazChida extends JFrame {
             }
             break;
     }
-}*/
+}
 
     private JPanel createCenter() {
         JPanel wrapper = new JPanel();
@@ -263,7 +263,7 @@ public class InterfazChida extends JFrame {
         txtEcMeasured = styledTextField("");
         txtPhMeasured = styledTextField("");
 
-        // date_time tiene default current_timestamp, se autocompleta pero es editable
+        
         txtDateTime = styledTextField(obtenerFechaHoraActual());
 
         JComponent[] fields = {

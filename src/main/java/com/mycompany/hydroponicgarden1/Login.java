@@ -278,9 +278,9 @@ if (emailOrPhone.isEmpty() || password.isEmpty()) {
 }
 
 // Authenticate user
-//UserDAO userDAO = new UserDAO();
+UserDAO userDAO = new UserDAO();
 
-/*if (userDAO.login(emailOrPhone, password)) {
+if (userDAO.login(emailOrPhone, password)) {
 
     // Get the logged-in user
     User user = userDAO.getUser(emailOrPhone);
@@ -293,7 +293,7 @@ if (emailOrPhone.isEmpty() || password.isEmpty()) {
             "Bienvenido.");
 
     // Open home window
-//    new Inicio().setVisible(true);
+   new Inicio().setVisible(true);
 
     // Close login window
     dispose();
@@ -304,7 +304,7 @@ if (emailOrPhone.isEmpty() || password.isEmpty()) {
             this,
             "Correo, teléfono o contraseña incorrectos.");
 
-}*/
+}
     
     }//GEN-LAST:event_btnLoginActionPerformed
 

@@ -323,7 +323,7 @@ public class SolucionNutritivaPanel extends JFrame {
                 new SolucionNutritivaPanel().setVisible(true);
                 break;
 
-            /*case "Mi Perfil":
+            case "Mi Perfil":
                 new Profile().setVisible(true);
                 break;
 
@@ -340,7 +340,7 @@ public class SolucionNutritivaPanel extends JFrame {
                     new Login().setVisible(true);
                 }
 
-                break;*/
+                break;
         }
     }
 });

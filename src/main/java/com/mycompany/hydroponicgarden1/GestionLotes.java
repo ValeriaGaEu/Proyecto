@@ -39,7 +39,7 @@ public class GestionLotes extends JFrame {
     private final Font labelFont = new Font("Segoe UI", Font.PLAIN, 13);
     private final Font fieldFont = new Font("Segoe UI", Font.PLAIN, 13);
 
-    // --- NUEVOS ATRIBUTOS DE CLASE PARA MANEJAR LOS DATOS ---
+   
     private JTextField txtIdLote;
     private JComboBox<String> cmbSistema;
     private JComboBox<String> cmbPlanta;
@@ -74,7 +74,7 @@ public class GestionLotes extends JFrame {
         content.add(createSideMenu(), BorderLayout.WEST);
         content.add(createCenter(), BorderLayout.CENTER);
         
-        // Configurar el evento de selección de la tabla al iniciar
+        
         configurarSeleccionTabla();
 
     cargarSistemas();
@@ -611,7 +611,7 @@ private JPanel createInfoCard() {
         return card;
     }
 
-    // --- MÉTODOS DE LÓGICA DE CONTROL ---
+ 
 
     private void accionRegistrar() {
 

@@ -37,7 +37,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         panelMenu.setLocation(-anchoMenu,55);
-//        configurarMenu();
+       configurarMenu();
         
          try {
             ImageIcon icon1 = new ImageIcon(getClass().getResource("/fotos/iconoSH.jpeg"));
@@ -89,7 +89,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         timer.start();
     }
-   /* private void configurarMenu() {
+    private void configurarMenu() {
 
     systemBtn1.addActionListener(e -> {
         if (menuAbierto) animarMenu();
@@ -129,7 +129,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         new Login().setVisible(true);
         dispose();
     });
-}*/
+}
          private void cargarTabla() {
 
     User user = session.getCurrentUser();
@@ -191,7 +191,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         txtBuscar = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         panelMenu = new javax.swing.JPanel();
         homeBtn1 = new javax.swing.JButton();
         systemBtn1 = new javax.swing.JButton();
@@ -381,12 +380,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jButton2.setText("Modificar");
         jButton2.addActionListener(this::jButton2ActionPerformed);
 
-        jButton3.setBackground(new java.awt.Color(255, 51, 51));
-        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Eliminar");
-        jButton3.addActionListener(this::jButton3ActionPerformed);
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -394,7 +387,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 823, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel9)
@@ -403,10 +396,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jButton2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton3)))
+                            .addComponent(jButton2))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -422,9 +412,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                .addComponent(jButton2)
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
@@ -659,7 +647,7 @@ if (dao.insertSystem(system)) {
         jTable1.getValueAt(fila, 3).toString()
     );
 
-    // 🔥 AQUÍ ESTÁ LO IMPORTANTE
+    
     session.setCurrentSystem(system);
 
     // (opcional) llenar campos visuales
@@ -698,22 +686,6 @@ system.setTypeSystem(
 
 system.setUbication(txtUbicacion.getText());
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        int fila = jTable1.getSelectedRow();
-
-if (fila == -1) {
-    JOptionPane.showMessageDialog(this, "Selecciona un sistema");
-    return;
-}
-
-int id = Integer.parseInt(jTable1.getValueAt(fila, 0).toString());
-
-HydroponicSystemDAO dao = new HydroponicSystemDAO();
-
-dao.deleteSystem(id);
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
         // TODO add your handling code here:
@@ -798,7 +770,6 @@ for (HydroponicSystem system : lista) {
     private javax.swing.JLabel iconoS;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

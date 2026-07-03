@@ -113,9 +113,20 @@ public class Profile extends javax.swing.JFrame {
         dispose();
     });
 
+    // Cerrar sesión
     logoutBtn.addActionListener(e -> {
-        new Login().setVisible(true);
-        dispose();
+
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Deseas cerrar la sesión?",
+                "Cerrar sesión",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            new Login().setVisible(true);
+            dispose();
+        }
     });
 }
     private void loadDateCombos() {
