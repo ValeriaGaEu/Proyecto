@@ -9,6 +9,8 @@ import com.mycompany.hydroponicgarden1.dao.UserDAO;
 import javax.swing.JOptionPane;
 import com.mycompany.hydroponicgarden1.model.User;
 import com.mycompany.hydroponicgarden1.session.session;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 /**
  *
@@ -39,8 +41,48 @@ ImageIcon userimg = new ImageIcon(getClass().getResource("/img/userimg.png"));
 jLabel10.setIcon(new ImageIcon(
     userimg.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)
 ));
-}
+// Placeholder para correo o teléfono
+txtEmailOrPhone.addFocusListener(new FocusAdapter() {
+    @Override
+    public void focusGained(FocusEvent e) {
+        if (txtEmailOrPhone.getText().equals("Ingresa tu correo o télefono")) {
+            txtEmailOrPhone.setText("");
+            txtEmailOrPhone.setForeground(java.awt.Color.BLACK);
+        }
+    }
 
+    @Override
+    public void focusLost(FocusEvent e) {
+        if (txtEmailOrPhone.getText().trim().isEmpty()) {
+            txtEmailOrPhone.setText("Ingresa tu correo o télefono");
+            txtEmailOrPhone.setForeground(java.awt.Color.GRAY);
+        }
+    }
+});
+
+// Placeholder para contraseña
+txtPassword.setEchoChar((char)0); // Mostrar texto al inicio
+
+txtPassword.addFocusListener(new FocusAdapter() {
+    @Override
+    public void focusGained(FocusEvent e) {
+        if (String.valueOf(txtPassword.getPassword()).equals("Ingresa la contraseña")) {
+            txtPassword.setText("");
+            txtPassword.setEchoChar('•'); // Oculta la contraseña
+            txtPassword.setForeground(java.awt.Color.BLACK);
+        }
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        if (String.valueOf(txtPassword.getPassword()).isEmpty()) {
+            txtPassword.setEchoChar((char)0); // Mostrar placeholder
+            txtPassword.setText("Ingresa la contraseña");
+            txtPassword.setForeground(java.awt.Color.GRAY);
+        }
+    }
+});
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -267,14 +309,10 @@ jLabel10.setIcon(new ImageIcon(
 String emailOrPhone = txtEmailOrPhone.getText().trim();
 String password = new String(txtPassword.getPassword());
 
-// Validate empty fields
-if (emailOrPhone.isEmpty() || password.isEmpty()) {
-
-    JOptionPane.showMessageDialog(
-               this,
-            "Completa todos los campos.");
-
-    return;
+if (emailOrPhone.isEmpty()
+        || emailOrPhone.equals("Ingresa tu correo o télefono")
+        || password.isEmpty()
+        || password.equals("Ingresa la contraseña")) {
 }
 
 // Authenticate user
