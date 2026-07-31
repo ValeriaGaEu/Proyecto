@@ -6,6 +6,10 @@ import java.awt.*;
 import java.awt.event.*;
 import com.mycompany.hydroponicgarden1.dao.NutrientSolutionDAO;
 import com.mycompany.hydroponicgarden1.model.NutrientSolution;
+import com.mycompany.hydroponicgarden1.dao.HydroponicSystemDAO;
+import com.mycompany.hydroponicgarden1.model.HydroponicSystem;
+import com.mycompany.hydroponicgarden1.session.session;
+import static java.awt.Component.LEFT_ALIGNMENT;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
@@ -13,21 +17,29 @@ import java.text.SimpleDateFormat;
 public class SolucionNutritivaPanel extends JFrame {
     private NutrientSolutionDAO solutionDAO = new NutrientSolutionDAO();
     // ===== Paleta de colores (igual que SistemaHuertoPanel) =====
-    private static final Color COLOR_VERDE_PRINCIPAL  = new Color(34, 139, 34);
-    private static final Color COLOR_AZUL_MODIFICAR   = new Color(33, 150, 243);
-    private static final Color COLOR_ROJO_ELIMINAR    = new Color(220, 53, 69);
-    private static final Color COLOR_FONDO            = new Color(248, 249, 250);
-    private static final Color COLOR_BORDE            = new Color(200, 220, 200);
-    private static final Color COLOR_TEXTO_TITULO     = new Color(30, 100, 30);
-    private static final Color COLOR_ENCABEZADO_TABLA = new Color(34, 139, 34);
+    private static final Color COLOR_VERDE_PRINCIPAL  = new Color(0x2E7D32); // verde de botón Registrar / título / sidebar
+    private static final Color COLOR_AZUL_MODIFICAR   = new Color(0x1565C0); // azul de botón Modificar
+    private static final Color COLOR_ROJO_ELIMINAR    = new Color(0xD32F2F); // rojo de botón Eliminar
+    private static final Color COLOR_FONDO            = new Color(0xF6F8F7); // fondo general de la página
+    private static final Color COLOR_BORDE            = new Color(0xE8E9E8); // borde de las tarjetas
+    private static final Color COLOR_TEXTO_TITULO     = new Color(0x2E7D32); // texto verde de títulos y valores
+    private static final Color COLOR_SUBTITULO        = new Color(0x6B7280); // gris del subtítulo del encabezado
+    private static final Color COLOR_ENCABEZADO_TABLA = new Color(0xF6F9F7); // fondo (casi blanco) del encabezado de tabla
+    private static final Color COLOR_TEXTO_ENCABEZADO_TABLA = new Color(0x37474F); // texto oscuro del encabezado de tabla
+    private static final Color COLOR_TEXTO_FILA       = new Color(0x333333); // texto de las filas de la tabla
     private static final Color COLOR_FILA_PAR         = Color.WHITE;
-    private static final Color COLOR_FILA_IMPAR       = new Color(245, 255, 245);
+    private static final Color COLOR_FILA_IMPAR       = new Color(0xE8F5E9); // verde clarito de filas alternas
     private static final Color COLOR_SELECCION        = new Color(198, 239, 206);
-    private static final Color VERDE_OSCURO_SIDEBAR   = new Color(0x0E4B2E);
+    private static final Color COLOR_PLACEHOLDER_IMG  = new Color(0xE6F0E6); // caja tipo imagen del panel de información
+    private static final Color COLOR_PLACEHOLDER_BORDE = new Color(0xDDE3E8);
+    private static final Color COLOR_AVATAR_BG        = new Color(0xB4DCB4);
+    private static final Color VERDE_OSCURO_SIDEBAR   = new Color(0x2E7D32); // fondo del sidebar (mismo verde principal)
+    private static final Color VERDE_ITEM_ACTIVO      = new Color(0x1B5E20); // ítem activo del sidebar
     private static final Color BLANCO                 = Color.WHITE;
 
     private static final String FUENTE = "Segoe UI";
     private static final int SIDEBAR_ANCHO = 230;
+    
 
     private static class IconoSimple implements Icon {
         private final String tipo;
@@ -197,40 +209,44 @@ public class SolucionNutritivaPanel extends JFrame {
     private JLabel lblValTemperatura;
     private JLabel lblValPh;
     private JLabel lblValPreparada;
+    private ArrayList<HydroponicSystem> sistemas;
 
     public SolucionNutritivaPanel() {
-        setTitle("Solucion Nutritiva");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1360, 1000);
-        setLocationRelativeTo(null);
+    setTitle("Solucion Nutritiva");
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setSize(1360, 1000);
+    setLocationRelativeTo(null);
 
-        JPanel content = new JPanel(new BorderLayout());
-        content.setBackground(COLOR_FONDO);
-        setContentPane(content);
+    JPanel content = new JPanel(new BorderLayout());
+    content.setBackground(COLOR_FONDO);
+    setContentPane(content);
 
-        sidebarWrapper = new JPanel(new BorderLayout());
-        sidebarWrapper.setBackground(VERDE_OSCURO_SIDEBAR);
-        sidebarWrapper.setPreferredSize(new Dimension(SIDEBAR_ANCHO, 0));
-        sidebarWrapper.setMinimumSize(new Dimension(0, 0));
-        sidebarContenido = crearSidebar();
-        sidebarWrapper.add(sidebarContenido, BorderLayout.CENTER);
+    sidebarWrapper = new JPanel(new BorderLayout());
+    sidebarWrapper.setBackground(VERDE_OSCURO_SIDEBAR);
+    sidebarWrapper.setPreferredSize(new Dimension(SIDEBAR_ANCHO, 0));
 
-        content.add(sidebarWrapper, BorderLayout.WEST);
-        content.add(crearContenidoPrincipal(), BorderLayout.CENTER);
-        cargarTabla();
-    }
+    sidebarContenido = crearSidebar();
 
-    // SIDEBAR IZQUIERDO (deslizable)
+    sidebarWrapper.add(sidebarContenido, BorderLayout.CENTER);
+
+    content.add(sidebarWrapper, BorderLayout.WEST);
+
+    content.add(crearContenidoPrincipal(), BorderLayout.CENTER);
+
+    cargarTabla();
+}
+
+
     private JPanel crearSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
         sidebar.setBackground(VERDE_OSCURO_SIDEBAR);
-        sidebar.setBorder(new EmptyBorder(15, 0, 15, 0));
+        sidebar.setBorder(new EmptyBorder(15, 14, 15, 14));
 
         JButton btnCerrarMenu = new JButton(new IconoSimple("menu", 20, BLANCO));
         btnCerrarMenu.setForeground(BLANCO);
         btnCerrarMenu.setBackground(VERDE_OSCURO_SIDEBAR);
-        btnCerrarMenu.setBorder(new EmptyBorder(0, 20, 25, 0));
+        btnCerrarMenu.setBorder(new EmptyBorder(0, 6, 15, 0));
         btnCerrarMenu.setFocusPainted(false);
         btnCerrarMenu.setContentAreaFilled(false);
         btnCerrarMenu.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -249,9 +265,13 @@ public class SolucionNutritivaPanel extends JFrame {
             {"logout", "Cerrar Sesión"}
         };
 
-        for (String[] item : items) {
+        for (int i = 0; i < items.length; i++) {
+            String[] item = items[i];
             boolean activo = item[1].equals("Solución Nutritiva");
             sidebar.add(crearItemMenu(item[0], item[1], activo));
+            if (i < items.length - 1) {
+                sidebar.add(Box.createVerticalStrut(8));
+            }
         }
 
         sidebar.add(Box.createVerticalGlue());
@@ -259,36 +279,48 @@ public class SolucionNutritivaPanel extends JFrame {
     }
 
     private JPanel crearItemMenu(String tipoIcono, String texto, boolean activo) {
-        JPanel item = new JPanel(new BorderLayout(10, 0));
-        item.setMaximumSize(new Dimension(SIDEBAR_ANCHO, 46));
-        item.setPreferredSize(new Dimension(SIDEBAR_ANCHO, 46));
-        item.setBackground(activo ? new Color(0x145C38) : VERDE_OSCURO_SIDEBAR);
-        item.setBorder(new EmptyBorder(0, 20, 0, 0));
+        final Color colorInactivo = VERDE_OSCURO_SIDEBAR;
 
-        JLabel lblIcono = new JLabel(new IconoSimple(tipoIcono, 18, BLANCO));
+        JPanel item = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(getBackground());
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        item.setOpaque(false);
+        item.setBackground(activo ? VERDE_ITEM_ACTIVO : colorInactivo);
+        item.setMaximumSize(new Dimension(SIDEBAR_ANCHO, 42));
+        item.setPreferredSize(new Dimension(SIDEBAR_ANCHO, 42));
+        item.setAlignmentX(Component.LEFT_ALIGNMENT);
+        item.setBorder(new EmptyBorder(0, 18, 0, 0));
+
         JLabel lbl = new JLabel(texto);
         lbl.setForeground(BLANCO);
         lbl.setFont(new Font(FUENTE, activo ? Font.BOLD : Font.PLAIN, 14));
 
-        JPanel contenido = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        contenido.setOpaque(false);
-        contenido.add(lblIcono);
-        contenido.add(lbl);
-        item.add(contenido, BorderLayout.CENTER);
+        item.add(lbl, BorderLayout.CENTER);
+        item.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         item.addMouseListener(new MouseAdapter() {
 
     @Override
     public void mouseEntered(MouseEvent e) {
         if (!activo) {
-            item.setBackground(new Color(0x145C38));
+            item.setBackground(VERDE_ITEM_ACTIVO);
+            item.repaint();
         }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         if (!activo) {
-            item.setBackground(VERDE_OSCURO_SIDEBAR);
+            item.setBackground(colorInactivo);
+            item.repaint();
         }
     }
 
@@ -375,9 +407,6 @@ public class SolucionNutritivaPanel extends JFrame {
         animacionTimer.start();
     }
 
-
-    // CONTENIDO PRINCIPAL (derecha) 
-
     private JPanel crearContenidoPrincipal() {
         JPanel contenedor = new JPanel(new BorderLayout(0, 0));
         contenedor.setBackground(COLOR_FONDO);
@@ -404,36 +433,27 @@ public class SolucionNutritivaPanel extends JFrame {
         return contenedor;
     }
 
-    // Encabezado
+  
     private JPanel crearEncabezado() {
         JPanel panel = new JPanel(new BorderLayout(12, 0));
         panel.setBackground(COLOR_FONDO);
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 16, 0));
 
-        JPanel izquierda = new JPanel(new BorderLayout(12, 0));
-        izquierda.setBackground(COLOR_FONDO);
-
-        JLabel icono = new JLabel(new IconoSimple("flask", 34, COLOR_VERDE_PRINCIPAL));
-        icono.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 8));
-
-        JPanel textoPanel = new JPanel(new GridLayout(2, 1, 0, 2));
+        JPanel textoPanel = new JPanel(new GridLayout(2, 1, 0, 4));
         textoPanel.setBackground(COLOR_FONDO);
 
         JLabel titulo = new JLabel("Solución Nutritiva");
-        titulo.setFont(new Font(FUENTE, Font.BOLD, 26));
+        titulo.setFont(new Font(FUENTE, Font.BOLD, 28));
         titulo.setForeground(COLOR_TEXTO_TITULO);
 
         JLabel subtitulo = new JLabel("Registra y administra la información de las soluciones nutritivas preparadas para tus cultivos.");
         subtitulo.setFont(new Font(FUENTE, Font.PLAIN, 13));
-        subtitulo.setForeground(new Color(100, 120, 100));
+        subtitulo.setForeground(COLOR_SUBTITULO);
 
         textoPanel.add(titulo);
         textoPanel.add(subtitulo);
 
-        izquierda.add(icono, BorderLayout.WEST);
-        izquierda.add(textoPanel, BorderLayout.CENTER);
-
-        // Botón de menú (para reabrir el sidebar aunque esté cerrado)
+        // Botón de menú (para reabrir/cerrar el sidebar)
         JButton btnAbrirMenu = new JButton(new IconoSimple("menu", 20, COLOR_TEXTO_TITULO));
         btnAbrirMenu.setFocusPainted(false);
         btnAbrirMenu.setContentAreaFilled(false);
@@ -444,7 +464,7 @@ public class SolucionNutritivaPanel extends JFrame {
         JPanel izquierdaConMenu = new JPanel(new BorderLayout());
         izquierdaConMenu.setBackground(COLOR_FONDO);
         izquierdaConMenu.add(btnAbrirMenu, BorderLayout.WEST);
-        izquierdaConMenu.add(izquierda, BorderLayout.CENTER);
+        izquierdaConMenu.add(textoPanel, BorderLayout.CENTER);
 
         JPanel derecha = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         derecha.setBackground(COLOR_FONDO);
@@ -455,7 +475,7 @@ public class SolucionNutritivaPanel extends JFrame {
         usuario.setFont(new Font(FUENTE, Font.BOLD, 13));
         JLabel rol = new JLabel("Administrador");
         rol.setFont(new Font(FUENTE, Font.PLAIN, 11));
-        rol.setForeground(new Color(100, 120, 100));
+        rol.setForeground(COLOR_SUBTITULO);
         textoUsuario.add(usuario);
         textoUsuario.add(rol);
         derecha.add(avatar);
@@ -466,14 +486,14 @@ public class SolucionNutritivaPanel extends JFrame {
         return panel;
     }
 
-  
+
     private JComponent crearAvatarIcono() {
         JComponent circulo = new JComponent() {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(220, 240, 220));
+                g2.setColor(COLOR_AVATAR_BG);
                 g2.fillOval(0, 0, getWidth(), getHeight());
                 g2.dispose();
                 new IconoSimple("person", 20, COLOR_TEXTO_TITULO)
@@ -484,13 +504,14 @@ public class SolucionNutritivaPanel extends JFrame {
         return circulo;
     }
 
-    //  Panel formulario 
+
     private JPanel crearPanelFormulario() {
         JPanel card = new JPanel(new GridBagLayout());
         card.setBackground(Color.WHITE);
         card.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(COLOR_BORDE, 1, true),
             BorderFactory.createEmptyBorder(20, 20, 20, 20)
+                
         ));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -499,56 +520,72 @@ public class SolucionNutritivaPanel extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
 
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2; gbc.weightx = 1.0;
-        JLabel titulo = new JLabel("Registro de Solución Nutritiva", new IconoSimple("document", 16, COLOR_TEXTO_TITULO), SwingConstants.LEFT);
-        titulo.setIconTextGap(8);
-        titulo.setFont(new Font(FUENTE, Font.BOLD, 15));
+        JLabel titulo = new JLabel("Registro de Solución Nutritiva");
+        titulo.setFont(new Font(FUENTE, Font.BOLD, 16));
         titulo.setForeground(COLOR_TEXTO_TITULO);
-        titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 14, 0));
         card.add(titulo, gbc);
 
         gbc.gridwidth = 1; gbc.weightx = 0;
 
-        cbSistemaHuerto = new JComboBox<>(new String[]{
-            "Invernadero Secundario (ID: 3)", "Invernadero Principal (ID: 1)", "Huerto Exterior (ID: 2)"
-        });
+       cbSistemaHuerto = new JComboBox<>();
+       cargarSistemas();
+
         estilizarCombo(cbSistemaHuerto);
 
-        txtFecha = crearTextField("2025-05-23");
-        txtConductividad = crearTextField("1.35");
-        txtTemperatura = crearTextField("22.8");
-        txtPh = crearTextField("5.8");
+        txtFecha = crearTextField("dia/mes/año");
+        txtConductividad = crearTextField("");
+        txtTemperatura = crearTextField("");
+        txtPh = crearTextField("");
 
-        txtObservaciones = new JTextArea("Solución preparada con fertilizante A y B. pH ajustado con ácido fosfórico.", 3, 20);
-        txtObservaciones.setFont(new Font(FUENTE, Font.PLAIN, 13));
-        txtObservaciones.setLineWrap(true);
-        txtObservaciones.setWrapStyleWord(true);
-        txtObservaciones.setBorder(BorderFactory.createEmptyBorder(5, 8, 5, 8));
-
+        
         agregarCampo(card, gbc, 1, "Sistema de huerto:", cbSistemaHuerto);
         agregarCampo(card, gbc, 2, "Fecha de preparación:", txtFecha);
         agregarCampo(card, gbc, 3, "Conductividad (mS/cm):", txtConductividad);
         agregarCampo(card, gbc, 4, "Temperatura (°C):", txtTemperatura);
         agregarCampo(card, gbc, 5, "Nivel de pH:", txtPh);
-
-        JScrollPane scrollObs = new JScrollPane(txtObservaciones);
-        scrollObs.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 210, 200), 1, true),
-            BorderFactory.createEmptyBorder(0, 0, 0, 0)
-        ));
-        agregarCampo(card, gbc, 6, "Observaciones:", scrollObs);
+        
 
         gbc.gridx = 0; gbc.gridy = 7; gbc.gridwidth = 2;
         gbc.insets = new Insets(14, 4, 4, 4);
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panelBotones.setBackground(Color.WHITE);
 
-        btnRegistrar = crearBoton("Registrar", COLOR_VERDE_PRINCIPAL, "plus");
+        btnRegistrar = crearBoton("Registrar", COLOR_VERDE_PRINCIPAL);
         btnRegistrar.addActionListener(e -> onRegistrarClick());
+
+        JButton btnModificar = crearBoton("Modificar", COLOR_AZUL_MODIFICAR);
+        btnModificar.addActionListener(e -> {
+            int fila = tablaHistorial.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this,
+                        "Selecciona un registro de la tabla para modificar.",
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            editarFila(fila);
+        });
+
+        JButton btnEliminar = crearBoton("Eliminar", COLOR_ROJO_ELIMINAR);
+        btnEliminar.addActionListener(e -> {
+            int fila = tablaHistorial.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this,
+                        "Selecciona un registro de la tabla para eliminar.",
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            eliminarFila(fila);
+        });
+
         panelBotones.add(btnRegistrar);
+        panelBotones.add(btnModificar);
+        panelBotones.add(btnEliminar);
         card.add(panelBotones, gbc);
 
         return card;
     }
+    
     private void cargarTabla() {
 
     modeloTabla.setRowCount(0);
@@ -558,18 +595,36 @@ public class SolucionNutritivaPanel extends JFrame {
     for (NutrientSolution s : lista) {
 
         modeloTabla.addRow(new Object[]{
-            s.getSolutionId(),
-            s.getSystemId(),
-            s.getPreparationDate(),
-            s.getConductivity(),
-            s.getTemperature(),
-            s.getLevelPh(),
-            "",
-            ""
-        });
+    s.getSolutionId(),
+    s.getSystemId(),
+    s.getPreparationDate(),
+    s.getConductivity(),
+    s.getTemperature(),
+    s.getLevelPh()
+});
 
     }
 
+}
+    private void cargarSistemas() {
+
+    HydroponicSystemDAO dao = new HydroponicSystemDAO();
+
+    sistemas = dao.getSystemsByUser(
+            session.getCurrentUser().getUserId()
+    );
+
+    cbSistemaHuerto.removeAllItems();
+
+    for (HydroponicSystem sistema : sistemas) {
+
+        cbSistemaHuerto.addItem(
+                sistema.getTypeSystem()
+                + " (ID: "
+                + sistema.getSystemId()
+                + ")"
+        );
+    }
 }
     private void agregarCampo(JPanel panel, GridBagConstraints gbc, int fila, String etiqueta, JComponent campo) {
         gbc.gridx = 0; gbc.gridy = fila; gbc.gridwidth = 1;
@@ -601,40 +656,28 @@ public class SolucionNutritivaPanel extends JFrame {
         combo.setPreferredSize(new Dimension(280, 32));
     }
 
-    //Botón 
+    /** Botón con esquinas redondeadas dibujadas a mano (paintComponent), igual que la referencia. */
     private JButton crearBoton(String texto, Color color) {
-        return crearBoton(texto, color, null);
-    }
 
-    private JButton crearBoton(String texto, Color color, String tipoIcono) {
-        JButton btn = new JButton(texto) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(getModel().isPressed() ? color.darker()
-                        : getModel().isRollover() ? color.brighter() : color);
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
-                g2.dispose();
-                super.paintComponent(g);
-            }
-        };
-        if (tipoIcono != null) {
-            btn.setIcon(new IconoSimple(tipoIcono, 14, Color.WHITE));
-            btn.setIconTextGap(8);
-        }
-        btn.setFont(new Font(FUENTE, Font.BOLD, 13));
-        btn.setForeground(Color.WHITE);
-        btn.setContentAreaFilled(false);
-        btn.setOpaque(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btn.setPreferredSize(new Dimension(140, 38));
-        return btn;
-    }
+    JButton btn = new JButton(texto);
 
-    // Registra 
+    btn.setFont(new Font(FUENTE, Font.BOLD, 13));
+    btn.setForeground(Color.WHITE);
+    btn.setBackground(color);
+
+    btn.setFocusPainted(true);
+    btn.setContentAreaFilled(true);
+    btn.setOpaque(true);
+    btn.setBorderPainted(true);
+
+    btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+    btn.setPreferredSize(new Dimension(130, 38));
+
+    return btn;
+}
+
+    /** Registra una fila nueva, o actualiza la fila en edición si venimos de "Editar"/"Modificar". */
    private void onRegistrarClick() {
 
     try {
@@ -643,12 +686,9 @@ public class SolucionNutritivaPanel extends JFrame {
 
         String sistema = cbSistemaHuerto.getSelectedItem().toString();
 
-        int idSystem = Integer.parseInt(
-                sistema.substring(
-                        sistema.indexOf("ID:") + 3,
-                        sistema.indexOf(")")
-                ).trim()
-        );
+       int posicion = cbSistemaHuerto.getSelectedIndex();
+
+int idSystem = sistemas.get(posicion).getSystemId();
 
         solution.setSystemId(idSystem);
 
@@ -694,6 +734,14 @@ public class SolucionNutritivaPanel extends JFrame {
                     "Éxito",
                     JOptionPane.INFORMATION_MESSAGE
             );
+            // Actualizar panel "Información actual"
+actualizarInformacionActual(
+        cbSistemaHuerto.getSelectedItem().toString(),
+        txtFecha.getText(),
+        txtConductividad.getText(),
+        txtTemperatura.getText(),
+        txtPh.getText()
+);
 
             btnRegistrar.putClientProperty("idSolution", null);
             btnRegistrar.setText("Registrar");
@@ -729,15 +777,15 @@ public class SolucionNutritivaPanel extends JFrame {
     }
 
 }
+   
     private void limpiarFormulario() {
         txtFecha.setText("");
         txtConductividad.setText("");
         txtTemperatura.setText("");
         txtPh.setText("");
-        txtObservaciones.setText("");
+        
     }
 
-    // Panel información 
     private JPanel crearPanelInformacion() {
         JPanel card = new JPanel();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
@@ -746,75 +794,83 @@ public class SolucionNutritivaPanel extends JFrame {
             BorderFactory.createLineBorder(COLOR_BORDE, 1, true),
             BorderFactory.createEmptyBorder(20, 20, 20, 20)
         ));
-        card.setPreferredSize(new Dimension(260, 0));
+        card.setPreferredSize(new Dimension(300, 0));
 
-        JPanel tituloPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
-        tituloPanel.setBackground(Color.WHITE);
-        tituloPanel.setAlignmentX(LEFT_ALIGNMENT);
-        JLabel tituloInfo = new JLabel("Información actual", new IconoSimple("info", 16, COLOR_TEXTO_TITULO), SwingConstants.LEFT);
-        tituloInfo.setIconTextGap(8);
-        tituloInfo.setFont(new Font(FUENTE, Font.BOLD, 14));
+        JLabel tituloInfo = new JLabel("Información actual");
+        tituloInfo.setFont(new Font(FUENTE, Font.BOLD, 16));
         tituloInfo.setForeground(COLOR_TEXTO_TITULO);
-        tituloPanel.add(tituloInfo);
-        card.add(tituloPanel);
-        card.add(Box.createVerticalStrut(16));
+        tituloInfo.setAlignmentX(LEFT_ALIGNMENT);
+        card.add(tituloInfo);
+        card.add(Box.createVerticalStrut(14));
 
-        lblUltimaFecha = new JLabel("23/05/2025 10:15 AM");
-        lblValConductividad = new JLabel("1.35 mS/cm");
-        lblValTemperatura = new JLabel("22.8 °C");
-        lblValPh = new JLabel("5.8");
-        lblValPreparada = new JLabel("Invernadero Secundario");
+        ImageIcon icono = new ImageIcon(
+        getClass().getResource("/imagen/lechuga.jpg")
+);
 
-        String[] etiquetas = {"Última solución registrada", "Conductividad", "Temperatura", "Nivel de pH", "Preparada para"};
-        String[] iconos = {"flask", "droplet", "thermometer", "droplet", "plant"};
+Image imagen = icono.getImage().getScaledInstance(
+        250, 160, Image.SCALE_SMOOTH
+);
+
+JLabel lblImagen = new JLabel(new ImageIcon(imagen));
+lblImagen.setAlignmentX(Component.LEFT_ALIGNMENT);
+lblImagen.setBorder(BorderFactory.createLineBorder(COLOR_PLACEHOLDER_BORDE));
+
+card.add(lblImagen);
+card.add(Box.createVerticalStrut(16));
+
+        lblUltimaFecha = new JLabel("");
+        lblValConductividad = new JLabel("");
+        lblValTemperatura = new JLabel("");
+        lblValPh = new JLabel("");
+        lblValPreparada = new JLabel("");
+
+        String[] etiquetas = {"Última solución", "Conductividad", "Temperatura", "Nivel de pH", "Preparada para"};
         JLabel[] valores = {lblUltimaFecha, lblValConductividad, lblValTemperatura, lblValPh, lblValPreparada};
 
         for (int i = 0; i < etiquetas.length; i++) {
-            card.add(crearFilaInfo(iconos[i], etiquetas[i], valores[i]));
-            if (i < etiquetas.length - 1) card.add(Box.createVerticalStrut(10));
+            card.add(crearFilaInfo(etiquetas[i], valores[i]));
+            card.add(Box.createVerticalStrut(10));
         }
 
         return card;
     }
 
-    private JPanel crearFilaInfo(String tipoIcono, String etiqueta, JLabel valorLabel) {
-        JPanel fila = new JPanel(new BorderLayout(8, 0));
-        fila.setBackground(new Color(245, 255, 245));
-        fila.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 230, 200), 1, true),
-            BorderFactory.createEmptyBorder(8, 10, 8, 10)
-        ));
-        fila.setMaximumSize(new Dimension(Integer.MAX_VALUE, 48));
+    private JPanel crearFilaInfo(String etiqueta, JLabel valorLabel) {
+        JPanel fila = new JPanel(new BorderLayout());
+        fila.setBackground(Color.WHITE);
         fila.setAlignmentX(LEFT_ALIGNMENT);
+        fila.setMaximumSize(new Dimension(Integer.MAX_VALUE, 22));
 
-        JLabel lblIcono = new JLabel(new IconoSimple(tipoIcono, 18, COLOR_VERDE_PRINCIPAL));
-        fila.add(lblIcono, BorderLayout.WEST);
-
-        JPanel textosPanel = new JPanel(new GridLayout(2, 1, 0, 0));
-        textosPanel.setBackground(new Color(245, 255, 245));
-
-        JLabel etiquetaLabel = new JLabel(etiqueta);
-        etiquetaLabel.setFont(new Font(FUENTE, Font.PLAIN, 11));
-        etiquetaLabel.setForeground(new Color(100, 130, 100));
+        JLabel etiquetaLabel = new JLabel(etiqueta + ":");
+        etiquetaLabel.setFont(new Font(FUENTE, Font.PLAIN, 13));
+        etiquetaLabel.setForeground(COLOR_TEXTO_ENCABEZADO_TABLA);
 
         valorLabel.setFont(new Font(FUENTE, Font.BOLD, 13));
         valorLabel.setForeground(COLOR_TEXTO_TITULO);
+        valorLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        textosPanel.add(etiquetaLabel);
-        textosPanel.add(valorLabel);
-        fila.add(textosPanel, BorderLayout.CENTER);
+        fila.add(etiquetaLabel, BorderLayout.WEST);
+        fila.add(valorLabel, BorderLayout.EAST);
         return fila;
     }
 
     private void actualizarInformacionActual(String sistema, String fecha, String conductividad, String temperatura, String ph) {
-        lblUltimaFecha.setText(fecha);
-        lblValConductividad.setText(conductividad + " mS/cm");
-        lblValTemperatura.setText(temperatura + " °C");
-        lblValPh.setText(ph);
-        lblValPreparada.setText(sistema);
-    }
 
-    // Panel historial 
+    System.out.println("ENTRO A INFORMACION ACTUAL");
+
+    lblUltimaFecha.setText(fecha);
+    lblValConductividad.setText(conductividad + " mS/cm");
+    lblValTemperatura.setText(temperatura + " °C");
+    lblValPh.setText(ph);
+    lblValPreparada.setText(sistema);
+
+    lblUltimaFecha.repaint();
+    lblValConductividad.repaint();
+    lblValTemperatura.repaint();
+    lblValPh.repaint();
+    lblValPreparada.repaint();
+}
+
     private JPanel crearPanelHistorial() {
         JPanel card = new JPanel(new BorderLayout(0, 8));
         card.setBackground(Color.WHITE);
@@ -823,11 +879,10 @@ public class SolucionNutritivaPanel extends JFrame {
             BorderFactory.createEmptyBorder(16, 16, 16, 16)
         ));
 
-        JLabel titulo = new JLabel("Historial de Soluciones Nutritivas", new IconoSimple("list", 16, COLOR_TEXTO_TITULO), SwingConstants.LEFT);
-        titulo.setIconTextGap(8);
-        titulo.setFont(new Font(FUENTE, Font.BOLD, 14));
+        JLabel titulo = new JLabel("Historial de Soluciones Nutritivas");
+        titulo.setFont(new Font(FUENTE, Font.BOLD, 16));
         titulo.setForeground(COLOR_TEXTO_TITULO);
-        titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 8, 0));
+        titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         card.add(titulo, BorderLayout.NORTH);
 
         JPanel centro = new JPanel(new BorderLayout(0, 8));
@@ -842,8 +897,7 @@ public class SolucionNutritivaPanel extends JFrame {
 
         JPanel der = new JPanel(new FlowLayout(FlowLayout.RIGHT, 6, 0));
         der.setBackground(Color.WHITE);
-        JLabel buscarLbl = new JLabel("Buscar:", new IconoSimple("search", 14, new Color(90, 90, 90)), SwingConstants.LEFT);
-        buscarLbl.setIconTextGap(5);
+        JLabel buscarLbl = new JLabel("Buscar:");
         buscarLbl.setFont(new Font(FUENTE, Font.PLAIN, 13));
         txtBuscar = new JTextField(15);
         txtBuscar.setFont(new Font(FUENTE, Font.PLAIN, 13));
@@ -852,6 +906,20 @@ public class SolucionNutritivaPanel extends JFrame {
             BorderFactory.createEmptyBorder(4, 8, 4, 8)
         ));
         txtBuscar.setPreferredSize(new Dimension(180, 30));
+        txtBuscar.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+
+    public void insertUpdate(javax.swing.event.DocumentEvent e) {
+        filtrarTabla();
+    }
+
+    public void removeUpdate(javax.swing.event.DocumentEvent e) {
+        filtrarTabla();
+    }
+
+    public void changedUpdate(javax.swing.event.DocumentEvent e) {
+        filtrarTabla();
+    }
+});
         der.add(buscarLbl);
         der.add(txtBuscar);
 
@@ -859,25 +927,58 @@ public class SolucionNutritivaPanel extends JFrame {
         controles.add(der, BorderLayout.EAST);
         centro.add(controles, BorderLayout.NORTH);
 
-        String[] columnas = {"ID", "Sistema de Huerto", "Fecha de Preparación", "Conductividad (mS/cm)", "Temperatura (°C)", "Nivel de pH", "Observaciones", "Acciones"};
-        modeloTabla = new DefaultTableModel(columnas, 0) {
-            @Override
-            public boolean isCellEditable(int row, int col) { return col == 7; }
-        };
-        modeloTabla.addTableModelListener(e -> actualizarRangoRegistros());
+        String[] columnas = {
+    "ID",
+    "Sistema de Huerto",
+    "Fecha de Preparación",
+    "Conductividad (mS/cm)",
+    "Temperatura (°C)",
+    "Nivel de pH"
+};
 
-        tablaHistorial = new JTable(modeloTabla) {
-            @Override
-            public Component prepareRenderer(TableCellRenderer r, int row, int col) {
-                Component c = super.prepareRenderer(r, row, col);
-                if (col != 7) { // la columna de acciones tiene su propio color
-                    c.setBackground(isRowSelected(row) ? COLOR_SELECCION
-                            : (row % 2 == 0 ? COLOR_FILA_PAR : COLOR_FILA_IMPAR));
-                    c.setForeground(isRowSelected(row) ? COLOR_TEXTO_TITULO : Color.DARK_GRAY);
-                }
-                return c;
-            }
-        };
+modeloTabla = new DefaultTableModel(columnas, 0) {
+
+    @Override
+    public boolean isCellEditable(int row, int col) {
+        return false;
+    }
+};
+
+modeloTabla.addTableModelListener(e -> actualizarRangoRegistros());
+
+
+tablaHistorial = new JTable(modeloTabla) {
+
+    @Override
+    public Component prepareRenderer(TableCellRenderer r, int row, int col) {
+
+        Component c = super.prepareRenderer(r, row, col);
+
+        if (col != 5) {
+
+            c.setBackground(
+                isRowSelected(row) 
+                ? COLOR_SELECCION 
+                : (row % 2 == 0 ? COLOR_FILA_PAR : COLOR_FILA_IMPAR)
+            );
+
+            c.setForeground(
+                isRowSelected(row)
+                ? COLOR_TEXTO_TITULO
+                : COLOR_TEXTO_FILA
+            );
+        }
+
+        return c;
+    }
+};
+
+
+// PARA EL BUSCADOR
+TableRowSorter<DefaultTableModel> sorter =
+        new TableRowSorter<>(modeloTabla);
+
+tablaHistorial.setRowSorter(sorter);
         tablaHistorial.setFont(new Font(FUENTE, Font.PLAIN, 13));
         tablaHistorial.setRowHeight(36);
         tablaHistorial.setShowVerticalLines(false);
@@ -886,27 +987,30 @@ public class SolucionNutritivaPanel extends JFrame {
         tablaHistorial.setSelectionForeground(COLOR_TEXTO_TITULO);
         tablaHistorial.getTableHeader().setFont(new Font(FUENTE, Font.BOLD, 13));
         tablaHistorial.getTableHeader().setBackground(COLOR_ENCABEZADO_TABLA);
-        tablaHistorial.getTableHeader().setForeground(Color.WHITE);
+        tablaHistorial.getTableHeader().setForeground(COLOR_TEXTO_ENCABEZADO_TABLA);
         tablaHistorial.getTableHeader().setPreferredSize(new Dimension(0, 38));
         tablaHistorial.getTableHeader().setReorderingAllowed(false);
+        tablaHistorial.getSelectionModel().addListSelectionListener(e -> {
+
+    if (!e.getValueIsAdjusting()) {
+        mostrarDatosSeleccionados();
+    }
+
+});
 
         DefaultTableCellRenderer centrado = new DefaultTableCellRenderer();
         centrado.setHorizontalAlignment(SwingConstants.CENTER);
         tablaHistorial.getColumnModel().getColumn(0).setCellRenderer(centrado);
         tablaHistorial.getColumnModel().getColumn(3).setCellRenderer(centrado);
         tablaHistorial.getColumnModel().getColumn(4).setCellRenderer(centrado);
-        tablaHistorial.getColumnModel().getColumn(5).setCellRenderer(centrado);
+       
 
         tablaHistorial.getColumnModel().getColumn(0).setPreferredWidth(40);
         tablaHistorial.getColumnModel().getColumn(1).setPreferredWidth(150);
         tablaHistorial.getColumnModel().getColumn(2).setPreferredWidth(120);
-        tablaHistorial.getColumnModel().getColumn(6).setPreferredWidth(220);
+       
 
-        // Columna "Acciones": botones reales de Editar / Eliminar por fila
-        tablaHistorial.getColumnModel().getColumn(7).setCellRenderer(new AccionesRenderer());
-        tablaHistorial.getColumnModel().getColumn(7).setCellEditor(new AccionesEditor());
-        tablaHistorial.getColumnModel().getColumn(7).setPreferredWidth(190);
-
+        
         JScrollPane scroll = new JScrollPane(tablaHistorial);
         scroll.setBorder(BorderFactory.createLineBorder(COLOR_BORDE, 1, true));
         scroll.setPreferredSize(new Dimension(0, 240));
@@ -932,10 +1036,10 @@ public class SolucionNutritivaPanel extends JFrame {
         txtConductividad.setText(String.valueOf(modeloTabla.getValueAt(fila, 3)));
         txtTemperatura.setText(String.valueOf(modeloTabla.getValueAt(fila, 4)));
         txtPh.setText(String.valueOf(modeloTabla.getValueAt(fila, 5)));
-        txtObservaciones.setText(String.valueOf(modeloTabla.getValueAt(fila, 6)));
+        
 
         filaEnEdicion = fila;
-        btnRegistrar.setText("Actualizar"); btnRegistrar.setIcon(new IconoSimple("pencil", 14, Color.WHITE));
+        btnRegistrar.setText("Actualizar");
         btnRegistrar.putClientProperty("idSolution", id);
     }
 
@@ -955,7 +1059,6 @@ public class SolucionNutritivaPanel extends JFrame {
         if (filaEnEdicion != null && filaEnEdicion == fila) {
             filaEnEdicion = null;
             btnRegistrar.setText("Registrar");
-            btnRegistrar.setIcon(new IconoSimple("plus", 14, Color.WHITE));
             limpiarFormulario();
         }
 
@@ -977,7 +1080,7 @@ public class SolucionNutritivaPanel extends JFrame {
 }
     }
 
-   
+ 
     private class AccionesRenderer extends JPanel implements TableCellRenderer {
         AccionesRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER, 5, 2));
@@ -1031,32 +1134,70 @@ public class SolucionNutritivaPanel extends JFrame {
         public Object getCellEditorValue() { return ""; }
     }
 
+    /** Botón chico redondeado para usar dentro de las celdas de la tabla. */
+   private JButton crearBotonTabla(String texto, Color color) {
 
-    private JButton crearBotonTabla(String texto, Color color) {
-        JButton btn = new JButton(texto) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(getModel().isPressed() ? color.darker()
-                        : getModel().isRollover() ? color.brighter() : color);
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 6, 6);
-                g2.dispose();
-                super.paintComponent(g);
-            }
-        };
-        btn.setIcon(new IconoSimple(texto.equals("Editar") ? "pencil" : "trash", 12, Color.WHITE));
-        btn.setIconTextGap(5);
-        btn.setFont(new Font(FUENTE, Font.BOLD, 11));
-        btn.setForeground(Color.WHITE);
-        btn.setContentAreaFilled(false);
-        btn.setOpaque(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btn.setPreferredSize(new Dimension(84, 26));
-        return btn;
+    JButton btn = new JButton(texto);
+
+    btn.setFont(new Font(FUENTE, Font.BOLD, 11));
+    btn.setForeground(Color.BLACK);
+    btn.setBackground(color);
+
+    btn.setFocusPainted(true);
+    btn.setContentAreaFilled(true);
+    btn.setOpaque(true);
+    btn.setBorderPainted(true);
+
+    btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+    btn.setPreferredSize(new Dimension(84, 26));
+
+    return btn;
+}
+private void filtrarTabla() {
+
+    String texto = txtBuscar.getText();
+
+    TableRowSorter<?> sorter =
+            (TableRowSorter<?>) tablaHistorial.getRowSorter();
+
+    if (texto.trim().isEmpty()) {
+
+        sorter.setRowFilter(null);
+
+    } else {
+
+        sorter.setRowFilter(
+            RowFilter.regexFilter("(?i)" + texto)
+        );
     }
+}
+private void mostrarDatosSeleccionados() {
+
+    int fila = tablaHistorial.getSelectedRow();
+
+    if (fila == -1) {
+        return;
+    }
+
+    // Si usas buscador, convierte la fila visual a la fila real del modelo
+    fila = tablaHistorial.convertRowIndexToModel(fila);
+
+    String id = modeloTabla.getValueAt(fila, 0).toString();
+    String sistema = modeloTabla.getValueAt(fila, 1).toString();
+    String fecha = modeloTabla.getValueAt(fila, 2).toString();
+    String conductividad = modeloTabla.getValueAt(fila, 3).toString();
+    String temperatura = modeloTabla.getValueAt(fila, 4).toString();
+    String ph = modeloTabla.getValueAt(fila, 5).toString();
+
+
+    lblUltimaFecha.setText(fecha);
+    lblValConductividad.setText(conductividad + " mS/cm");
+    lblValTemperatura.setText(temperatura + " °C");
+    lblValPh.setText(ph);
+    lblValPreparada.setText(sistema);
+
+}
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
