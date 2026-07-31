@@ -210,6 +210,36 @@ public boolean insertSystem(HydroponicSystem system) {
 
     return systems;
 }
-}
+public ArrayList<HydroponicSystem> getAllSystems(){
 
+    ArrayList<HydroponicSystem> systems = new ArrayList<>();
+
+    String sql = "SELECT * FROM garden_system";
+
+    try {
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        ResultSet result = statement.executeQuery();
+
+        while(result.next()){
+
+            HydroponicSystem system = new HydroponicSystem();
+
+            system.setSystemId(result.getInt("id_system"));
+            system.setCapacityLiters(result.getDouble("capacity_liters"));
+            system.setTypeSystem(result.getString("type_system"));
+            system.setUbication(result.getString("ubication"));
+            system.setUserId(result.getInt("id_user"));
+
+            systems.add(system);
+        }
+
+    } catch(SQLException e){
+        System.out.println(e.getMessage());
+    }
+
+    return systems;
+}
+}
 
