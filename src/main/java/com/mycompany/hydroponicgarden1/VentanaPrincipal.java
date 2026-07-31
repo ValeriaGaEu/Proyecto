@@ -28,17 +28,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
      */
     public VentanaPrincipal() {
         initComponents();
+        // Cargar en la tabla los sistemas registrados del usuario
         cargarTabla();
+        // Personalizar la apariencia del encabezado de la tabla
          jTable1.getTableHeader().setUI(new javax.swing.plaf.basic.BasicTableHeaderUI());
          jTable1.getTableHeader().setBackground(new java.awt.Color(232, 245, 233)); 
          jTable1.getTableHeader().setForeground(new java.awt.Color(46, 125, 50));
     
+        // Configurar el tamaño, posición y propiedades de la ventana
         this.setPreferredSize(new java.awt.Dimension(591, 650));
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        // Ocultar inicialmente el menú lateral
         panelMenu.setLocation(-anchoMenu,55);
-       configurarMenu();
-        
+        // Configurar las acciones de los botones del menú
+        configurarMenu();
+        // Cargar el logotipo del sistema
          try {
             ImageIcon icon1 = new ImageIcon(getClass().getResource("/fotos/iconoSH.jpeg"));
             Image img1 = icon1.getImage().getScaledInstance(iconoS.getWidth(), iconoS.getHeight(), Image.SCALE_SMOOTH);
@@ -47,12 +52,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             System.err.println("Error 1: " + e.getMessage());
         }
     }
+ // Abre y cierra el menú lateral mediante una animación.
     private void animarMenu() {
-
+        // Crear un temporizador para realizar la animación
         Timer timer = new Timer(5, null);
 
         timer.addActionListener(e -> {
-
+            // Verificar si el menú está cerrado
             if (!menuAbierto) {
 
                 // Abrir menú
@@ -86,68 +92,70 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 }
             }
         });
-
+        // Iniciar la animación
         timer.start();
     }
+//Configura las acciones de cada botón del menú lateral, permitiendo navegar entre las diferentes ventanas del sistema.
     private void configurarMenu() {
 
     systemBtn1.addActionListener(e -> {
         if (menuAbierto) animarMenu();
     });
-
+    // Abrir la ventana de inicio
     homeBtn1.addActionListener(e -> {
         new Inicio().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de plantas
     plantBtn1.addActionListener(e -> {
         new planta().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de gestion de lotes
     loteBtn1.addActionListener(e -> {
         new GestionLotes().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de monitoreo
     monitoreoBtn1.addActionListener(e -> {
         new InterfazChida().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de solucion
     solutionBtn1.addActionListener(e -> {
         new SolucionNutritivaPanel().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de perfil
     perfilBtn1.addActionListener(e -> {
         new Profile().setVisible(true);
         dispose();
     });
-
+    // Cerrar la sesión y regresar al Login
     CloseBtn1.addActionListener(e -> {
         new Login().setVisible(true);
         dispose();
     });
 }
+// Obtiene de la base de datos todos los sistemas registrados por el usuario que inició sesión y los muestra en la tabla.
          private void cargarTabla() {
-
+    // Obtener el usuario que inició sesión
     User user = session.getCurrentUser();
-
+   // Verificar que exista una sesión activa
     if (user == null) {
         return;
     }
-
+    // Crear el objeto para acceder a la base de datos
     HydroponicSystemDAO dao = new HydroponicSystemDAO();
-
+    // Obtener la lista de sistemas del usuario
     ArrayList<HydroponicSystem> lista =
             dao.getSystemsByUser(user.getUserId());
-
+    // Obtener el modelo de la tabla
     DefaultTableModel modelo =
             (DefaultTableModel) jTable1.getModel();
-
+    // Limpiar la tabla antes de cargar los nuevos datos
     modelo.setRowCount(0);
-
+    // Agregar cada sistema encontrado a la tabla
     for (HydroponicSystem system : lista) {
 
         modelo.addRow(new Object[]{
@@ -580,8 +588,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        // Obtener el usuario que inició sesión
         User user = session.getCurrentUser();
-
+// Verificar que exista una sesión activa
 if (user == null) {
 
     JOptionPane.showMessageDialog(
@@ -590,7 +599,7 @@ if (user == null) {
 
     return;
 }
-
+// Validar que los campos obligatorios estén completos
 if (txtCapacidad.getText().trim().isEmpty()
         || txtUbicacion.getText().trim().isEmpty()) {
 
@@ -600,9 +609,9 @@ if (txtCapacidad.getText().trim().isEmpty()
 
     return;
 }
-
+// Crear un nuevo objeto Sistema de Huerto
 HydroponicSystem system = new HydroponicSystem();
-
+// Asignar los datos ingresados al sistema
 system.setCapacityLiters(
         Double.parseDouble(txtCapacidad.getText().trim()));
 
@@ -613,9 +622,9 @@ system.setUbication(
         txtUbicacion.getText().trim());
 
 system.setUserId(user.getUserId());
-
+// Crear el objeto para acceder a la base de datos
 HydroponicSystemDAO dao = new HydroponicSystemDAO();
-
+// Registrar el sistema en la base de datos
 if (dao.insertSystem(system)) {
 
     JOptionPane.showMessageDialog(
@@ -623,7 +632,7 @@ if (dao.insertSystem(system)) {
             "Sistema registrado correctamente.");
 
     cargarTabla(); // Actualiza la tabla
-
+    // Limpiar los campos del formulario
     txtCapacidad.setText("");
     txtUbicacion.setText("");
     txtID.setText("");
@@ -639,9 +648,9 @@ if (dao.insertSystem(system)) {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
-
+// Obtener la fila seleccionada de la tabla
     int fila = jTable1.getSelectedRow();
-
+    // Crear un objeto para almacenar la información seleccionada
     HydroponicSystem system = new HydroponicSystem();
 
     system.setSystemId(
@@ -659,32 +668,34 @@ if (dao.insertSystem(system)) {
     system.setUbication(
         jTable1.getValueAt(fila, 3).toString()
     );
-
     
+    // Guardar el sistema seleccionado en la sesión
     session.setCurrentSystem(system);
 
-    // (opcional) llenar campos visuales
+    // Mostrar la información del sistema en el formulario
     txtID.setText(String.valueOf(system.getSystemId()));
     txtCapacidad.setText(String.valueOf(system.getCapacityLiters()));
     jComboBox1.setSelectedItem(system.getTypeSystem());
     txtUbicacion.setText(system.getUbication());
-
+    // Informar que el sistema fue seleccionado
     JOptionPane.showMessageDialog(this, "Sistema seleccionado ✔");
+
 
 
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+         // Verificar que exista un sistema seleccionado
         int fila = jTable1.getSelectedRow();
 
 if (fila == -1) {
     JOptionPane.showMessageDialog(this, "Selecciona un sistema");
     return;
 }
-
+// Verificar que exista un sistema seleccionado
 HydroponicSystem system = new HydroponicSystem();
-
+// Asignar la información modificada
 system.setSystemId(
     Integer.parseInt(jTable1.getValueAt(fila, 0).toString())
 );
@@ -702,24 +713,25 @@ system.setUbication(txtUbicacion.getText());
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
         // TODO add your handling code here:
+        // Obtener el usuario que inició sesión
         User user = session.getCurrentUser();
 
 if (user == null) {
     return;
 }
-
+// Crear el objeto para consultar la base de datos
 HydroponicSystemDAO dao = new HydroponicSystemDAO();
-
+// Buscar los sistemas que coincidan con el texto ingresado
 ArrayList<HydroponicSystem> lista =
         dao.searchSystems(
                 user.getUserId(),
                 txtBuscar.getText().trim());
-
+// Obtener el modelo de la tabla
 DefaultTableModel modelo =
         (DefaultTableModel) jTable1.getModel();
-
+// Limpiar la tabla antes de mostrar los resultados
 modelo.setRowCount(0);
-
+// Agregar los resultados encontrados a la tabla
 for (HydroponicSystem system : lista) {
 
     modelo.addRow(new Object[]{
@@ -751,6 +763,48 @@ for (HydroponicSystem system : lista) {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        // Obtener el sistema seleccionado
+    int fila = jTable1.getSelectedRow();
+    // Verificar que exista una selección
+    if (fila == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Selecciona un sistema para eliminar.");
+        return;
+    }
+    // Solicitar confirmación antes de eliminar
+    int opcion = JOptionPane.showConfirmDialog(
+            this,
+            "¿Deseas eliminar este sistema?",
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION);
+
+    if (opcion != JOptionPane.YES_OPTION) {
+        return;
+    }
+    // Obtener el ID del sistema seleccionado
+    int id = Integer.parseInt(
+            jTable1.getValueAt(fila, 0).toString());
+    // Crear el objeto para acceder a la base de datos
+    HydroponicSystemDAO dao = new HydroponicSystemDAO();
+    // Eliminar el sistema de la base de datos
+    if (dao.deleteSystem(id)) {
+
+        JOptionPane.showMessageDialog(this,
+                "Sistema eliminado correctamente.");
+        // Actualizar la tabla después de eliminar el registro
+        cargarTabla();
+        // Limpiar los campos del formulario
+        txtID.setText("");
+        txtCapacidad.setText("");
+        txtUbicacion.setText("");
+        jComboBox1.setSelectedIndex(0);
+
+    } else {
+
+        JOptionPane.showMessageDialog(this,
+                "No se pudo eliminar el sistema.");
+
+    }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
