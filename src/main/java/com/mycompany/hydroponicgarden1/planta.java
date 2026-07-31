@@ -32,8 +32,13 @@ public class planta extends javax.swing.JFrame {
      * Creates new form planta
      */
     public planta() {
+        
         initComponents();
-       configurarMenu();
+        // Configura el menu
+        configurarMenu();
+        // Cargar en la tabla los sistemas registrados del usuario
+        cargarTabla();
+        // Personalizar la apariencia del encabezado de la tabla
         getContentPane().setBackground(Color.WHITE);
         jLabel1.setForeground(java.awt.Color.decode("#3A5A40"));
         jLabel5.setForeground(java.awt.Color.decode("#3A5A40"));
@@ -45,7 +50,7 @@ public class planta extends javax.swing.JFrame {
         jTable1.getTableHeader().setBackground(new java.awt.Color(232, 245, 233)); 
         jTable1.getTableHeader().setForeground(new java.awt.Color(46, 125, 50));
 
-       
+        // Cargar el logotipo del sistema
         ImageIcon icon = new ImageIcon(getClass().getResource("/imagen/logo.png"));
 
         Image img = icon.getImage().getScaledInstance(
@@ -54,38 +59,40 @@ public class planta extends javax.swing.JFrame {
                 Image.SCALE_SMOOTH);
 
         jLabel23.setIcon(new ImageIcon(img));
-        
+        // Cargar el logotipo del sistema
         ImageIcon icono_usuario = new ImageIcon(getClass().getResource("/imagen/icono_usuario.png"));
         jLabel24.setIcon(icono_usuario);
-        
+        // Cargar el logotipo del sistema
         ImageIcon icono1 = new ImageIcon(getClass().getResource("/imagen/icono1.png"));
         jLabel25.setIcon(icono1);
-        
+        // Cargar el logotipo del sistema
         ImageIcon icono2 = new ImageIcon(getClass().getResource("/imagen/icono2.png"));
         jLabel26.setIcon(icono2);
-        
+        // Cargar el logotipo del sistema
         ImageIcon icono3 = new ImageIcon(getClass().getResource("/imagen/icono3.png"));
         jLabel27.setIcon(icono3);
-        
+        // Cargar el logotipo del sistema
         ImageIcon icono4 = new ImageIcon(getClass().getResource("/imagen/icono4.png"));
         jLabel28.setIcon(icono4);
-        
+        // Cargar el logotipo del sistema
         ImageIcon icono5 = new ImageIcon(getClass().getResource("/imagen/icono5.png"));
         jLabel29.setIcon(icono5);
-        
+        // Cargar el logotipo del sistema
         ImageIcon icono6 = new ImageIcon(getClass().getResource("/imagen/icono6.png"));
         jLabel30.setIcon(icono6);
-        
+        // Cargar el logotipo del sistema
         ImageIcon icono7 = new ImageIcon(getClass().getResource("/imagen/icono7.png"));
         jLabel31.setIcon(icono7);
+
         
     }
+    // Abre y cierra el menú lateral mediante una animación.
     private void animarMenu() {
-
+         // Crear un temporizador para realizar la animación
         Timer timer = new Timer(5, null);
 
         timer.addActionListener(e -> {
-
+            /// Verificar si el menú está cerrado
             if (!menuAbierto) {
 
                 // Abrir menú
@@ -119,87 +126,90 @@ public class planta extends javax.swing.JFrame {
                 }
             }
         });
-
+        // Iniciar la animación
         timer.start();
     }
-   private void configurarMenu() {
+    //Configura las acciones de cada botón del menú lateral, permitiendo navegar entre las diferentes ventanas del sistema.
+    private void configurarMenu() {
 
     plantBtn1.addActionListener(e -> {
         if (menuAbierto) animarMenu();
     });
-
+    // Abrir la ventana de inicio
     homeBtn1.addActionListener(e -> {
         new Inicio().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de Sistema de Huerto
     systemBtn1.addActionListener(e -> {
         new VentanaPrincipal().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de Lote
     loteBtn1.addActionListener(e -> {
         new GestionLotes().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de Monitoreo
     monitoreoBtn1.addActionListener(e -> {
         new InterfazChida().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de Solución
     solutionBtn1.addActionListener(e -> {
         new SolucionNutritivaPanel().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de Perfil
     perfilBtn1.addActionListener(e -> {
         new Profile().setVisible(true);
         dispose();
     });
-
+    // Cerrar la sesión y regresar al Login
     CloseBtn1.addActionListener(e -> {
         new Login().setVisible(true);
         dispose();
     });
 }
+    // Obtiene de la base de datos todos los sistemas registrados por el usuario que inició sesión y los muestra en la tabla.
     private void cargarTabla() {
-
-    HydroponicSystem system = session.getCurrentSystem();
-
-    if (system == null) {
-        JOptionPane.showMessageDialog(this, "No hay un sistema seleccionado.");
+    // Obtener el usuario que inició sesión
+    HydroponicSystem sistema = session.getCurrentSystem();
+    // Verificar que exista una sesión activa
+    if (sistema == null) {
         return;
     }
-
+    // Crear el objeto para acceder a la base de datos
     PlantDAO dao = new PlantDAO();
-
-    ArrayList<Plant> lista = dao.getPlantsBySystem(system.getSystemId());
-
+    // Obtener la lista de sistemas 
+    ArrayList<Plant> lista = dao.getPlantsBySystem(sistema.getSystemId());
+    // Obtener el modelo de la tabla
     DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
-
+    // Limpiar la tabla antes de cargar los nuevos datos
     modelo.setRowCount(0);
-
-    for (Plant plant : lista) {
+    // Agregar cada planta encontrada a la tabla
+    for (Plant p : lista) {
 
         modelo.addRow(new Object[]{
-            plant.getPlantId(),
-            plant.getNamePlant(),
-            plant.getVariety(),
-            plant.getHarvestTimeDays(),
-            plant.getPhIdealMax(),
-            plant.getPhIdealMin()
+            p.getPlantId(),
+            p.getNamePlant(),
+            p.getVariety(),
+            p.getHarvestTimeDays(),
+            p.getPhIdealMin(),
+            p.getPhIdealMax()
         });
     }
 }
+    // Muestra la imagen e información de la planta seleccionada según el nombre ingresado.
     public void mostrarImagen() {
 
     String nombre = txtname.getText().trim().toLowerCase();
 
     String ruta = null;
-
+// Selecciona la imagen y la información correspondiente dependiendo del nombre de la planta.
     switch (nombre) {
         case "lechuga":
+            // Carga y ajusta la imagen al tamaño del JLabel.
             ruta = "/imagen/lechuga.jpg";
             jLabel15.setText("Hortaliza de hoja");
             jLabel17.setText("45 - 60 días");
@@ -246,7 +256,7 @@ public class planta extends javax.swing.JFrame {
             jLabel34.setText("Necesita abundante luz solar");
             jLabel35.setText("y un buen sistema de soporte.");
             break;
-
+// Si la planta no existe, limpia la información mostrada.
         default:
             jLabel13.setIcon(null);
             jLabel15.setText("");
@@ -337,6 +347,7 @@ public class planta extends javax.swing.JFrame {
         jLabel29 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
         txtBuscar = new javax.swing.JTextField();
+        btnmodificar = new javax.swing.JButton();
         panelMenu = new javax.swing.JPanel();
         systemBtn1 = new javax.swing.JButton();
         plantBtn1 = new javax.swing.JButton();
@@ -385,13 +396,13 @@ public class planta extends javax.swing.JFrame {
                 .addComponent(btnmenu)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 144, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addGap(189, 189, 189))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 355, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addGap(94, 94, 94)))
                 .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -488,7 +499,7 @@ public class planta extends javax.swing.JFrame {
                         .addComponent(txtname))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(idplant, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(20, 20, 20))
             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -712,6 +723,12 @@ public class planta extends javax.swing.JFrame {
 
         txtBuscar.addActionListener(this::txtBuscarActionPerformed);
 
+        btnmodificar.setBackground(new java.awt.Color(0, 51, 204));
+        btnmodificar.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        btnmodificar.setForeground(new java.awt.Color(255, 255, 255));
+        btnmodificar.setText("Modificar");
+        btnmodificar.addActionListener(this::btnmodificarActionPerformed);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -720,7 +737,10 @@ public class planta extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btndelete))
+                        .addComponent(btndelete)
+                        .addGap(26, 26, 26)
+                        .addComponent(btnmodificar, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -732,7 +752,7 @@ public class planta extends javax.swing.JFrame {
                         .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(49, 49, 49))
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 796, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -745,11 +765,13 @@ public class planta extends javax.swing.JFrame {
                     .addComponent(jLabel22)
                     .addComponent(jLabel36)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(26, 26, 26)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btndelete)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btndelete)
+                    .addComponent(btnmodificar))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         panelMenu.setBackground(new java.awt.Color(0, 153, 0));
@@ -885,6 +907,7 @@ public class planta extends javax.swing.JFrame {
     private void btnregisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnregisterActionPerformed
         // TODO add your handling code here:
 
+    
     User user = session.getCurrentUser();
 
     if (user == null) {
@@ -902,7 +925,7 @@ public class planta extends javax.swing.JFrame {
         return;
     }
 
-    // 🔥 SISTEMA ACTUAL
+ 
     HydroponicSystem system = session.getCurrentSystem();
 
     if (system == null) {
@@ -914,7 +937,7 @@ public class planta extends javax.swing.JFrame {
 
     System.out.println("ID del sistema: " + id);
 
-    // 🔥 CREAR PLANTA
+    
     Plant plant = new Plant();
     plant.setNamePlant(txtname.getText().trim());
     plant.setVariety(txtvariety.getText().trim());
@@ -922,7 +945,7 @@ public class planta extends javax.swing.JFrame {
     plant.setPhIdealMax(Double.parseDouble(txtphmax.getText().trim()));
     plant.setPhIdealMin(Double.parseDouble(txtphmin.getText().trim()));
 
-    // 🔥 AQUÍ FALTABA ESTO
+    
     plant.setSystemId(id);
 
     PlantDAO dao = new PlantDAO();
@@ -1000,6 +1023,7 @@ public class planta extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "No se encontraron plantas.");
     }
 
+
     }//GEN-LAST:event_txtBuscarActionPerformed
 
     private void btndeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndeleteActionPerformed
@@ -1038,9 +1062,7 @@ public class planta extends javax.swing.JFrame {
 
     } else {
         JOptionPane.showMessageDialog(this, "No se pudo eliminar la planta.");
-    }
-
-         
+    }   
     }//GEN-LAST:event_btndeleteActionPerformed
 
     private void txtphminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtphminActionPerformed
@@ -1076,6 +1098,43 @@ public class planta extends javax.swing.JFrame {
         animarMenu();
     }//GEN-LAST:event_btnmenuActionPerformed
 
+    private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
+        // TODO add your handling code here:
+        if(idplant.getText().trim().isEmpty()){
+        JOptionPane.showMessageDialog(this,
+                "Selecciona una planta de la tabla.");
+        return;
+    }
+
+    Plant p = new Plant();
+
+    p.setPlantId(Integer.parseInt(idplant.getText()));
+    p.setNamePlant(txtname.getText());
+    p.setVariety(txtvariety.getText());
+    p.setHarvestTimeDays(Integer.parseInt(txtharvest.getText()));
+    p.setPhIdealMax(Double.parseDouble(txtphmax.getText()));
+    p.setPhIdealMin(Double.parseDouble(txtphmin.getText()));
+
+
+    PlantDAO dao = new PlantDAO();
+
+
+    if(dao.updatePlant(p)){
+
+        JOptionPane.showMessageDialog(this,
+                "Planta modificada correctamente.");
+
+        cargarTabla();
+
+    }else{
+
+        JOptionPane.showMessageDialog(this,
+                "Error al modificar la planta.");
+    }
+
+
+    }//GEN-LAST:event_btnmodificarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1085,6 +1144,7 @@ public class planta extends javax.swing.JFrame {
     private javax.swing.JButton CloseBtn1;
     private javax.swing.JButton btndelete;
     private javax.swing.JButton btnmenu;
+    private javax.swing.JButton btnmodificar;
     private javax.swing.JButton btnregister;
     private javax.swing.JButton homeBtn1;
     private javax.swing.JTextField idplant;

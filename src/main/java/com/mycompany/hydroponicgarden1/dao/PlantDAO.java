@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class PlantDAO {
 
-    private final Connection connection;
+   private final Connection connection;
 
     public PlantDAO() {
         connection = DatabaseConnection.getConnection();
@@ -90,7 +90,39 @@ public class PlantDAO {
 
         return list;
     }
+// ==========================
+// MODIFICAR PLANTA
+// ==========================
+public boolean updatePlant(Plant p) {
 
+    String sql = """
+        UPDATE plant
+        SET 
+            name_planat = ?,
+            variety = ?,
+            harvest_time_days = ?,
+            ph_ideal_max = ?,
+            ph_ideal_min = ?
+        WHERE id_plant = ?
+    """;
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+        ps.setString(1, p.getNamePlant());
+        ps.setString(2, p.getVariety());
+        ps.setInt(3, p.getHarvestTimeDays());
+        ps.setDouble(4, p.getPhIdealMax());
+        ps.setDouble(5, p.getPhIdealMin());
+        ps.setInt(6, p.getPlantId());
+
+        return ps.executeUpdate() > 0;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return false;
+}
     // ==========================
     // ELIMINAR PLANTA
     // ==========================
