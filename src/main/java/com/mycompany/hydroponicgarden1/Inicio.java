@@ -25,15 +25,17 @@ public class Inicio extends javax.swing.JFrame {
     
     public Inicio() {
         initComponents();
+        // Establece el color de fondo de la ventana.
         getContentPane().setBackground(new Color(233, 225, 225));
         
-        
+        // Coloca el menú oculto al iniciar la aplicación.
         panelMenu.setLocation(-anchoMenu,55);
+        // Configura las acciones de cada botón del menú.
         configurarMenu();
-        
+        // Cargar el logotipo principal del sistema.
         try {
 
-
+            // Cargar la imagen principal del logo
             ImageIcon icono = new ImageIcon(getClass().getResource("/imagen/hydrofarm_logo.png"));
 
             Image imagen = icono.getImage().getScaledInstance(
@@ -45,25 +47,25 @@ public class Inicio extends javax.swing.JFrame {
         } catch (Exception e) {
             System.err.println("Error 1: " + e.getMessage());
         }
-        
+        // Cargar la imagen principal de la pantalla de inicio.
         ImageIcon icono = new ImageIcon(getClass().getResource("/imagen/home.png"));
         LableImageHome.setIcon(icono);
-        
+        // Actualizar y mostrar correctamente la interfaz.
         this.revalidate();
         this.repaint();
         this.setVisible(true);
         
     }
-
+//Abre y cierra el menú lateral mediante una animación utilizando un Timer.
     private void animarMenu() {
-
+        // Crear el temporizador que controlará la animación.
         Timer timer = new Timer(5, null);
-
+        
         timer.addActionListener(e -> {
-
+            // Verificar si el menú está cerrado para abrirlo.
             if (!menuAbierto) {
 
-                // Abrir menú
+                // Desplazar el menú hacia la derecha.
                 if (panelMenu.getX() < 0) {
 
                     panelMenu.setLocation(
@@ -71,7 +73,7 @@ public class Inicio extends javax.swing.JFrame {
                             55);
 
                 } else {
-
+                    // Finalizar la apertura del menú.
                     panelMenu.setLocation(0,55);
                     menuAbierto = true;
                     timer.stop();
@@ -79,7 +81,7 @@ public class Inicio extends javax.swing.JFrame {
 
             } else {
 
-                // Cerrar menú
+                // Desplazar el menú hacia la izquierda para cerrarlo.
                 if (panelMenu.getX() > -anchoMenu) {
 
                     panelMenu.setLocation(
@@ -87,57 +89,59 @@ public class Inicio extends javax.swing.JFrame {
                             55);
 
                 } else {
-
+                    // Finalizar el cierre del menú.
                     panelMenu.setLocation(-anchoMenu,55);
                     menuAbierto = false;
                     timer.stop();
                 }
             }
         });
-
+        // Iniciar la animación.
         timer.start();
     }
+//Configura las acciones de navegación de todos los botones del menú lateral.
     private void configurarMenu() {
-
+    // Mantener la ventana actual y cerrar el menú si está abierto.
     homeBtn1.addActionListener(e -> {
         if (menuAbierto) animarMenu();
     });
-
+    // Abrir la ventana de Sistemas de Huerto.
     systemBtn1.addActionListener(e -> {
         new VentanaPrincipal().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de Planta
     plantBtn1.addActionListener(e -> {
         new planta().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de Lote
     loteBtn1.addActionListener(e -> {
         new GestionLotes().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de monitoreo
     monitoreoBtn1.addActionListener(e -> {
         new InterfazChida().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de Solucion
     solutionBtn1.addActionListener(e -> {
         new SolucionNutritivaPanel().setVisible(true);
         dispose();
     });
-
+    // Abrir la ventana de perfil
     perfilBtn1.addActionListener(e -> {
         new Profile().setVisible(true);
         dispose();
     });
-
+    // Cerrar el programa y regresar al login
     CloseBtn1.addActionListener(e -> {
         new Login().setVisible(true);
         dispose();
     });
 }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -377,14 +381,18 @@ public class Inicio extends javax.swing.JFrame {
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         // TODO add your handling code here:
+        // Ejecutar la animación del menú lateral.
         animarMenu();
     }//GEN-LAST:event_btnMenuActionPerformed
 
     private void perfilBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_perfilBtn1ActionPerformed
         // TODO add your handling code here:
-        /*Profile perfil = new Profile();
+        // Crear una nueva ventana del perfil.
+        Profile perfil = new Profile();
+        // Mostrar la ventana del perfil.
         perfil.setVisible(true);
-        dispose();*/
+        // Cerrar la ventana actual.
+        dispose();
     }//GEN-LAST:event_perfilBtn1ActionPerformed
 
     /**

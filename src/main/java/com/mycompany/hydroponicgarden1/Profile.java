@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.hydroponicgarden1;
-
 import javax.swing.Timer;
 import com.mycompany.hydroponicgarden1.model.User;
 import com.mycompany.hydroponicgarden1.session.session;
@@ -26,13 +25,15 @@ public class Profile extends javax.swing.JFrame {
     private final int anchoMenu = 180;
     
     public Profile() {
-        initComponents();
+       initComponents();
         
         loadDateCombos();
         cargarDatosUsuario();
         configurarMenu();
         
         
+        setLocationRelativeTo(null); // Centrar ventana
+        setResizable(true);
     }
     
     private void animarMenu() {
@@ -113,20 +114,9 @@ public class Profile extends javax.swing.JFrame {
         dispose();
     });
 
-    // Cerrar sesión
     logoutBtn.addActionListener(e -> {
-
-        int opcion = JOptionPane.showConfirmDialog(
-                this,
-                "¿Deseas cerrar la sesión?",
-                "Cerrar sesión",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-
-        if (opcion == JOptionPane.YES_OPTION) {
-            new Login().setVisible(true);
-            dispose();
-        }
+        new Login().setVisible(true);
+        dispose();
     });
 }
     private void loadDateCombos() {
@@ -157,22 +147,30 @@ public class Profile extends javax.swing.JFrame {
     if (user == null) {
         return;
     }
-
     txtFirstName.setText(user.getFirstName());
     txtLastName.setText(user.getLastName());
     txtEmailOrPhone.setText(user.getEmailOrPhone());
+    lblFirstName.setText(user.getFirstName());
+    lblLastName.setText(user.getLastName());
+    lblEmailOrPhone.setText(user.getEmailOrPhone());
 
     if (user.getBirthDate() != null) {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(user.getBirthDate());
 
-        cmbDay.setSelectedItem(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
-        cmbMonth.setSelectedItem(String.valueOf(calendar.get(Calendar.MONTH) + 1));
-        cmbYear.setSelectedItem(String.valueOf(calendar.get(Calendar.YEAR)));
+        String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+        String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        String year = String.valueOf(calendar.get(Calendar.YEAR));
+
+        cmbDay.setSelectedItem(day);
+        cmbMonth.setSelectedItem(month);
+        cmbYear.setSelectedItem(year);
+        lblBirthDate.setText(day + "/" + month + "/" + year);
     }
-}
-    
+
+    }
+
 
    public static void main(String args[]) {
 
@@ -221,11 +219,12 @@ public class Profile extends javax.swing.JFrame {
         txtConfirmPassword = new javax.swing.JTextField();
         btnChangePassword = new javax.swing.JButton();
         txtNewPassword = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
+        Datos = new javax.swing.JPanel();
         lblFirstName = new javax.swing.JLabel();
         lblLastName = new javax.swing.JLabel();
         lblEmailOrPhone = new javax.swing.JLabel();
         lblBirthDate = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         headerPanel = new javax.swing.JPanel();
         LabelIcon = new javax.swing.JLabel();
         btnMenu = new javax.swing.JButton();
@@ -237,44 +236,52 @@ public class Profile extends javax.swing.JFrame {
         principalPanel.setBackground(new java.awt.Color(233, 225, 225));
         principalPanel.setPreferredSize(new java.awt.Dimension(791, 550));
 
-        menuPanel.setBackground(new java.awt.Color(11, 94, 32));
+        menuPanel.setBackground(new java.awt.Color(0, 102, 0));
         menuPanel.setPreferredSize(new java.awt.Dimension(180, 305));
 
+        homeBtn.setForeground(new java.awt.Color(255, 255, 255));
         homeBtn.setText("Inicio");
         homeBtn.setBorderPainted(false);
         homeBtn.setContentAreaFilled(false);
         homeBtn.setFocusPainted(false);
 
+        systemBtn.setForeground(new java.awt.Color(255, 255, 255));
         systemBtn.setText("Sistema Huerto");
         systemBtn.setBorderPainted(false);
         systemBtn.setContentAreaFilled(false);
         systemBtn.setFocusPainted(false);
 
+        plantBtn.setForeground(new java.awt.Color(255, 255, 255));
         plantBtn.setText("Plantas");
         plantBtn.setBorderPainted(false);
         plantBtn.setContentAreaFilled(false);
         plantBtn.setFocusPainted(false);
 
+        loteBtn.setForeground(new java.awt.Color(255, 255, 255));
         loteBtn.setText("Lotes");
         loteBtn.setBorderPainted(false);
         loteBtn.setContentAreaFilled(false);
         loteBtn.setFocusPainted(false);
 
+        monitoreoBtn.setForeground(new java.awt.Color(255, 255, 255));
         monitoreoBtn.setText("Monitoreo");
         monitoreoBtn.setBorderPainted(false);
         monitoreoBtn.setContentAreaFilled(false);
         monitoreoBtn.setFocusPainted(false);
 
+        solutionBtn.setForeground(new java.awt.Color(255, 255, 255));
         solutionBtn.setText("Solució Nutritiva");
         solutionBtn.setBorderPainted(false);
         solutionBtn.setContentAreaFilled(false);
         solutionBtn.setFocusPainted(false);
 
         profileBtn.setBackground(new java.awt.Color(66, 127, 53));
+        profileBtn.setForeground(new java.awt.Color(255, 255, 255));
         profileBtn.setText("Mi Perfil");
         profileBtn.setBorderPainted(false);
         profileBtn.setFocusPainted(false);
 
+        logoutBtn.setForeground(new java.awt.Color(255, 255, 255));
         logoutBtn.setText("Cerrar Sesión");
         logoutBtn.setBorderPainted(false);
         logoutBtn.setContentAreaFilled(false);
@@ -295,7 +302,7 @@ public class Profile extends javax.swing.JFrame {
                     .addComponent(solutionBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(profileBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(logoutBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         menuPanelLayout.setVerticalGroup(
             menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -347,10 +354,12 @@ public class Profile extends javax.swing.JFrame {
         txtEmailOrPhone.setText("Correo o teléfono");
 
         btnUpdate.setBackground(new java.awt.Color(21, 101, 192));
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
         btnUpdate.setText("Modificar");
         btnUpdate.addActionListener(this::btnUpdateActionPerformed);
 
         btnDelete.setBackground(new java.awt.Color(211, 47, 47));
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
         btnDelete.setText("Eliminar");
         btnDelete.addActionListener(this::btnDeleteActionPerformed);
 
@@ -374,22 +383,8 @@ public class Profile extends javax.swing.JFrame {
         informationPanelLayout.setHorizontalGroup(
             informationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(informationPanelLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(btnUpdate)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(informationPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(informationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(informationPanelLayout.createSequentialGroup()
-                        .addComponent(birthdayLbl)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cmbDay, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
-                        .addComponent(cmbMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cmbYear, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(informationPanelLayout.createSequentialGroup()
                         .addComponent(phoneLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -402,7 +397,23 @@ public class Profile extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, informationPanelLayout.createSequentialGroup()
                             .addComponent(lastNameLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(informationPanelLayout.createSequentialGroup()
+                        .addGroup(informationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(informationPanelLayout.createSequentialGroup()
+                                .addComponent(birthdayLbl)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cmbDay, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(informationPanelLayout.createSequentialGroup()
+                                .addGap(31, 31, 31)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(37, 37, 37)
+                        .addGroup(informationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(informationPanelLayout.createSequentialGroup()
+                                .addComponent(cmbMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(cmbYear, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
         informationPanelLayout.setVerticalGroup(
@@ -412,7 +423,7 @@ public class Profile extends javax.swing.JFrame {
                 .addGroup(informationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nameLbl)
                     .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addGroup(informationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lastNameLbl, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtLastName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -449,7 +460,8 @@ public class Profile extends javax.swing.JFrame {
         txtConfirmPassword.setForeground(new java.awt.Color(51, 51, 51));
         txtConfirmPassword.setText("Verefica la nueva contraseña");
 
-        btnChangePassword.setBackground(new java.awt.Color(21, 101, 192));
+        btnChangePassword.setBackground(new java.awt.Color(0, 153, 0));
+        btnChangePassword.setForeground(new java.awt.Color(255, 255, 255));
         btnChangePassword.setText("Cambiar");
         btnChangePassword.addActionListener(this::btnChangePasswordActionPerformed);
 
@@ -463,16 +475,14 @@ public class Profile extends javax.swing.JFrame {
             passwordPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(passwordPanelLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(passwordPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnChangePassword, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(passwordPanelLayout.createSequentialGroup()
-                        .addGroup(passwordPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(newLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(checkPassLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(25, 25, 25)
-                        .addGroup(passwordPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNewPassword)
-                            .addComponent(txtConfirmPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))))
+                .addGroup(passwordPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnChangePassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(newLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(checkPassLbl, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addGroup(passwordPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtNewPassword)
+                    .addComponent(txtConfirmPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))
                 .addContainerGap(422, Short.MAX_VALUE))
         );
         passwordPanelLayout.setVerticalGroup(
@@ -491,7 +501,7 @@ public class Profile extends javax.swing.JFrame {
                 .addGap(28, 28, 28))
         );
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        Datos.setBackground(new java.awt.Color(255, 255, 255));
 
         lblFirstName.setForeground(new java.awt.Color(58, 90, 64));
         lblFirstName.setText("Nombre");
@@ -505,43 +515,49 @@ public class Profile extends javax.swing.JFrame {
         lblBirthDate.setForeground(new java.awt.Color(58, 90, 64));
         lblBirthDate.setText("Fecha de Nacimiento");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(lblEmailOrPhone)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(134, Short.MAX_VALUE)
-                        .addComponent(lblBirthDate))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 102, 0));
+        jLabel1.setText("Datos del usuario");
+
+        javax.swing.GroupLayout DatosLayout = new javax.swing.GroupLayout(Datos);
+        Datos.setLayout(DatosLayout);
+        DatosLayout.setHorizontalGroup(
+            DatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(DatosLayout.createSequentialGroup()
+                .addGroup(DatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(DatosLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(DatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblBirthDate)
+                            .addComponent(lblEmailOrPhone)))
+                    .addGroup(DatosLayout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(lblFirstName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblLastName)))
-                .addGap(37, 37, 37))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(93, 93, 93)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblFirstName)
-                    .addComponent(lblLastName))
-                .addGap(18, 18, 18)
-                .addComponent(lblEmailOrPhone)
-                .addGap(18, 18, 18)
-                .addComponent(lblBirthDate)
+                        .addGroup(DatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblLastName)
+                            .addComponent(lblFirstName))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, DatosLayout.createSequentialGroup()
+                .addGap(0, 69, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(64, 64, 64))
+        );
+        DatosLayout.setVerticalGroup(
+            DatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(DatosLayout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addComponent(jLabel1)
+                .addGap(39, 39, 39)
+                .addComponent(lblFirstName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblLastName)
+                .addGap(17, 17, 17)
+                .addComponent(lblEmailOrPhone)
+                .addGap(28, 28, 28)
+                .addComponent(lblBirthDate)
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         headerPanel.setBackground(new java.awt.Color(255, 255, 255));
-
-        LabelIcon.setText("jLabel1");
 
         btnMenu.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
         btnMenu.setText("☰");
@@ -562,9 +578,9 @@ public class Profile extends javax.swing.JFrame {
                 .addComponent(btnMenu)
                 .addGap(138, 138, 138)
                 .addComponent(LabelIcon)
-                .addGap(188, 188, 188)
-                .addComponent(titleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(titleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(420, 420, 420))
         );
         headerPanelLayout.setVerticalGroup(
             headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -573,7 +589,7 @@ public class Profile extends javax.swing.JFrame {
                 .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnMenu)
                     .addComponent(LabelIcon)
-                    .addComponent(titleLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(titleLbl))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -594,7 +610,7 @@ public class Profile extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(informationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(Datos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(principalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(principalPanelLayout.createSequentialGroup()
                                     .addGap(27, 27, 27)
@@ -603,7 +619,10 @@ public class Profile extends javax.swing.JFrame {
                                     .addGap(18, 18, 18)
                                     .addComponent(passwordPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 41, Short.MAX_VALUE))))
-            .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, principalPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         principalPanelLayout.setVerticalGroup(
             principalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -615,15 +634,15 @@ public class Profile extends javax.swing.JFrame {
                         .addComponent(informationLbl)
                         .addGap(4, 4, 4)
                         .addGroup(principalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Datos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(informationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(changePasswordLbl)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(passwordPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26))
                     .addGroup(principalPanelLayout.createSequentialGroup()
-                        .addComponent(menuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
+                        .addComponent(menuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
                         .addContainerGap())))
         );
 
@@ -662,9 +681,11 @@ UserDAO userDAO = new UserDAO();
 
 if (userDAO.updateUser(user)) {
 
-    JOptionPane.showMessageDialog(
-            this,
-            "Datos actualizados correctamente.");
+    JOptionPane.showMessageDialog(this, "Datos actualizados correctamente.");
+    lblFirstName.setText(user.getFirstName());
+    lblLastName.setText(user.getLastName());
+    lblEmailOrPhone.setText(user.getEmailOrPhone());
+    lblBirthDate.setText(birthDate);
 
 } else {
 
@@ -676,7 +697,7 @@ if (userDAO.updateUser(user)) {
 
     private void btnChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePasswordActionPerformed
         // TODO add your handling code here:
-        String newPassword = txtNewPassword.getText().trim();
+       String newPassword = txtNewPassword.getText().trim();
 String confirmPassword = txtConfirmPassword.getText().trim();
 
 if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
@@ -730,7 +751,7 @@ if (userDAO.updatePassword(user.getUserId(), newPassword)) {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        int option = JOptionPane.showConfirmDialog(
+         int option = JOptionPane.showConfirmDialog(
         this,
         "¿Estás seguro de eliminar tu cuenta?\nEsta acción no se puede deshacer.",
         "Confirmar eliminación",
@@ -776,6 +797,7 @@ if (option == JOptionPane.YES_OPTION) {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Datos;
     private javax.swing.JLabel LabelIcon;
     private javax.swing.JLabel birthdayLbl;
     private javax.swing.JButton btnChangePassword;
@@ -791,7 +813,7 @@ if (option == JOptionPane.YES_OPTION) {
     private javax.swing.JButton homeBtn;
     private javax.swing.JLabel informationLbl;
     private javax.swing.JPanel informationPanel;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lastNameLbl;
     private javax.swing.JLabel lblBirthDate;
     private javax.swing.JLabel lblEmailOrPhone;
@@ -817,4 +839,5 @@ if (option == JOptionPane.YES_OPTION) {
     private javax.swing.JTextField txtLastName;
     private javax.swing.JTextField txtNewPassword;
     // End of variables declaration//GEN-END:variables
+
 }
