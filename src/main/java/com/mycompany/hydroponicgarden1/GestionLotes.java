@@ -39,13 +39,14 @@ public class GestionLotes extends JFrame {
     private final Font labelFont = new Font("Segoe UI", Font.PLAIN, 13);
     private final Font fieldFont = new Font("Segoe UI", Font.PLAIN, 13);
 
-    // --- NUEVOS ATRIBUTOS DE CLASE PARA MANEJAR LOS DATOS ---
+    // Componentes del formulario se utilizan para registrar, modificar y visualizar los lotes.
     private JTextField txtIdLote;
     private JComboBox<String> cmbSistema;
     private JComboBox<String> cmbPlanta;
     private JTextField txtCantidad;
     private JComboBox<String> cmbEstado;
     private JTextField txtFechaSiembra;
+    // Etiquetas donde se muestra la información del lote seleccionado
     private JLabel lblId;
     private JLabel lblSistema;
     private JLabel lblPlanta;
@@ -53,13 +54,16 @@ public class GestionLotes extends JFrame {
     private JLabel lblEstado;
     private JLabel lblFecha;
     private JLabel lblImagen;
-    
+    // Tabla y modelo donde se muestran los lotes registrados
     private JTable table;
     private DefaultTableModel tableModel;
+    // Campo utilizado para realizar búsquedas
     private JTextField txtBuscar;
+    // Listas que almacenan los sistemas y plantas cargados desde la base de datos
     private ArrayList<HydroponicSystem> listaSistemas = new ArrayList<>();
     private ArrayList<Plant> listaPlantas = new ArrayList<>();
 
+    // Inicializa la ventana y carga la información necesaria.
     public GestionLotes() {
         setTitle("Gestion de Lotes");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -87,6 +91,7 @@ public class GestionLotes extends JFrame {
 
     });
     }
+    // Navega entre las diferentes ventanas del sistema según la opción seleccionada del menú lateral.
     private void navegar(String opcion) {
 
     switch (opcion) {
@@ -133,6 +138,8 @@ public class GestionLotes extends JFrame {
             break;
     }
 }
+    // Obtiene de la base de datos todos los sistemas de huerto pertenecientes al usuario que inició sesión.
+    // Después llena el ComboBox de sistemas.
     private void cargarSistemas() {
 
     User user = session.getCurrentUser();
@@ -158,6 +165,7 @@ public class GestionLotes extends JFrame {
         cargarPlantas();
     }
 }
+    // Carga las plantas correspondientes al sistema seleccionado en el ComboBox.
     private void cargarPlantas() {
 
     if (cmbSistema.getSelectedIndex() == -1)
@@ -179,6 +187,7 @@ public class GestionLotes extends JFrame {
 
     }
 }
+  // Consulta todos los lotes registrados del sistema seleccionado y los muestra en la tabla.  
     private void cargarTabla() {
 
     if (cmbSistema.getSelectedIndex() == -1)
@@ -232,6 +241,7 @@ public class GestionLotes extends JFrame {
         });
     }
 }
+    // Busca lotes utilizando el texto escrito en el cuadro de búsqueda.
     private void buscarLotes() {
 
     if (cmbSistema.getSelectedIndex() == -1)
@@ -288,7 +298,7 @@ public class GestionLotes extends JFrame {
 
 }
     
-
+// Crea el menú lateral de navegación.
     private JPanel createSideMenu() {
         JPanel menu = new JPanel();
         menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
@@ -319,8 +329,7 @@ public class GestionLotes extends JFrame {
 
         return menu;
     }
-
-
+// Crea el encabezado principal de la ventana.
     private JPanel createHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
@@ -372,7 +381,7 @@ public class GestionLotes extends JFrame {
 
         return header;
     }
-
+// Organiza el contenido principal de la ventana: formulario, información y tabla.
     private JPanel createCenter() {
         JPanel wrapper = new JPanel();
         wrapper.setOpaque(false);
@@ -391,7 +400,7 @@ public class GestionLotes extends JFrame {
 
         return wrapper;
     }
-
+// Crea el formulario donde se registran, modifican y eliminan los lotes.
     private JPanel createFormCard() {
         RoundedPanel card = new RoundedPanel(20, CARD);
         card.setLayout(new BorderLayout());
@@ -462,6 +471,7 @@ JButton btnEliminar = crearBoton("Eliminar", RED);
 
         return card;
     }
+    // Crea un botón con el estilo visual definido.
 private JButton crearBoton(String texto, Color color) {
 
     JButton btn = new JButton(texto);
@@ -479,6 +489,7 @@ private JButton crearBoton(String texto, Color color) {
 
     return btn;
 }
+// Crea el panel donde se muestra la información detallada del lote seleccionado.
 private JPanel createInfoCard() {
 
     RoundedPanel card = new RoundedPanel(20, CARD);
@@ -556,7 +567,7 @@ lblImagen.setPreferredSize(new Dimension(250,250));
 
     return card;
 }
-
+// Crea la tabla donde se muestran todos los lotes registrados.
     private JPanel createTableCard() {
         RoundedPanel card = new RoundedPanel(20, CARD);
         card.setLayout(new BorderLayout(0, 15));
@@ -630,8 +641,7 @@ lblImagen.setPreferredSize(new Dimension(250,250));
         return card;
     }
 
-    // --- MÉTODOS DE LÓGICA DE CONTROL ---
-
+// Valida los datos del formulario y registra un nuevo lote en la base de datos.
     private void accionRegistrar() {
 
     if (cmbSistema.getSelectedIndex() == -1 ||
@@ -700,7 +710,7 @@ lblImagen.setPreferredSize(new Dimension(250,250));
                 "No fue posible registrar el lote.");
     }
     }
-
+// Actualiza la información del lote seleccionado en la base de datos.
     private void accionModificar() {
 
     int fila = table.getSelectedRow();
@@ -772,7 +782,7 @@ lblImagen.setPreferredSize(new Dimension(250,250));
     }
 
     }
-
+// Elimina el lote seleccionado después de confirmar la operación.
     private void accionEliminar() {
 
 
@@ -825,7 +835,9 @@ lblImagen.setPreferredSize(new Dimension(250,250));
                 "No fue posible eliminar el lote.");
     }
     }
-
+// Detecta cuando el usuario selecciona
+// un registro de la tabla y carga su
+// información en el formulario.
     private void configurarSeleccionTabla() {
 
     table.getSelectionModel().addListSelectionListener(e -> {
@@ -857,6 +869,8 @@ if (batch != null) {
         }
     });
 }
+// Muestra en el panel de información
+// los datos del lote seleccionado.
     private void mostrarInformacion(Batch batch) {
 
     lblId.setText(String.valueOf(batch.getBatchId()));
@@ -892,6 +906,8 @@ if (batch != null) {
     lblEstado.setText(batch.getState());
     lblFecha.setText(batch.getPlantingDate().toString());
 }
+// Carga y muestra la imagen de la planta
+// correspondiente al lote seleccionado.
     private void mostrarImagenPlanta(String nombrePlanta) {
 
     ImageIcon icon = new ImageIcon(
@@ -905,6 +921,8 @@ if (batch != null) {
     lblImagen.setIcon(new ImageIcon(img));
     lblImagen.setText("");
 }
+// Limpia todos los campos del formulario
+// y reinicia las selecciones.
     private void limpiarFormulario() {
         txtIdLote.setText("");
         txtCantidad.setText("");
@@ -914,9 +932,8 @@ if (batch != null) {
         cmbEstado.setSelectedIndex(0);
         table.clearSelection();
     }
-
-    // --- MÉTODOS DE ESTILIZACIÓN ORIGINALES ---
-
+// Crea un JTextField con el estilo
+// utilizado en toda la aplicación.
     private JTextField styledTextField(String text) {
         JTextField field = new JTextField(text);
         field.setFont(fieldFont);
@@ -930,7 +947,8 @@ if (batch != null) {
         field.setPreferredSize(new Dimension(220, 36));
         return field;
     }
-
+// Crea un JComboBox con el diseño
+// personalizado del sistema.
     private JComboBox<String> styledComboBox(String[] items) {
         JComboBox<String> combo = new JComboBox<>(items);
         combo.setFont(fieldFont);
@@ -940,7 +958,8 @@ if (batch != null) {
         combo.setPreferredSize(new Dimension(220, 36));
         return combo;
     }
-
+// Crea una etiqueta tipo "badge"
+// con colores personalizados.
     private JLabel createBadge(String text) {
         JLabel badge = new JLabel(text);
         badge.setOpaque(true);
@@ -950,6 +969,8 @@ if (batch != null) {
         badge.setBorder(new EmptyBorder(4, 10, 4, 10));
         return badge;
     }
+// Crea los botones del menú lateral
+// y asigna su acción de navegación.
  private JButton crearBotonMenu(String texto, boolean activo) {
 
     JButton btn = new JButton(texto);
@@ -970,6 +991,9 @@ if (batch != null) {
 
     return btn;
 }
+// Punto de inicio de la aplicación.
+// Configura el Look & Feel y muestra
+// la ventana principal.
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
@@ -979,7 +1003,8 @@ if (batch != null) {
             new GestionLotes().setVisible(true);
         });
     }
-
+// Panel personalizado con bordes
+// redondeados y efecto de sombra.
     static class RoundedPanel extends JPanel {
         private final int radius;
         private final Color backgroundColor;

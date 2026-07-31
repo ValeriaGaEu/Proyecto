@@ -12,7 +12,7 @@ import com.mycompany.hydroponicgarden1.dao.MonitoringDAO;
 import com.mycompany.hydroponicgarden1.model.Monitoring;
 
 public class InterfazChida extends JFrame {
-    
+    // COLORES UTILIZADOS EN LA INTERFAZ
     private final Color BG = Color.decode("#F6F8F7");
     private final Color CARD = Color.WHITE;
     private final Color GREEN = Color.decode("#2E7D32");
@@ -23,13 +23,12 @@ public class InterfazChida extends JFrame {
     private final Color BORDER = Color.decode("#DDE3E8");
     private final Color BADGE_BG = Color.decode("#E8F5E9");
     private final Color BADGE_TEXT = Color.decode("#43A047");
-
+    // FUENTES UTILIZADAS EN LA VENTANA
     private final Font titleFont = new Font("Segoe UI", Font.BOLD, 28);
     private final Font sectionFont = new Font("Segoe UI", Font.BOLD, 16);
     private final Font labelFont = new Font("Segoe UI", Font.PLAIN, 13);
     private final Font fieldFont = new Font("Segoe UI", Font.PLAIN, 13);
-
-    // --- ATRIBUTOS DE CLASE PARA MANEJAR LOS DATOS (segun tabla monitoring) ---
+    // COMPONENTES DEL FORMULARIO
     private JTextField txtIdMonitoring;
     private JTextField txtWaterTemperature;
     private JTextField txtAmbientTemperature;
@@ -38,36 +37,40 @@ public class InterfazChida extends JFrame {
     private JTextField txtPhMeasured;
     private JTextField txtDateTime;
     private JLabel lblImagen;
-
+    // TABLA Y ACCESO A BASE DE DATOS
     private JTable table;
     private DefaultTableModel tableModel;
     private MonitoringDAO monitoringDAO = new MonitoringDAO();
 
+    // CONSTRUCTOR DE LA VENTANA
     public InterfazChida() {
+    // Configuración básica de la ventana    
     setTitle("Gestion de Monitoreo");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setSize(1300, 1000);
     setLocationRelativeTo(null);
-
+    // Panel principal
     JPanel content = new JPanel(new BorderLayout(0, 20));
     content.setBackground(BG);
     content.setBorder(new EmptyBorder(20, 20, 20, 20));
     setContentPane(content);
-
+    // Agregar las diferentes secciones de la interfaz
     content.add(createHeader(), BorderLayout.NORTH);
     content.add(createSideMenu(), BorderLayout.WEST);
     content.add(createCenter(), BorderLayout.CENTER);
-
+    // Configurar selección de la tabla
     configurarSeleccionTabla();
-
+    // Cargar los registros existentes
     cargarTabla();
 }
+    // ABRIR OTRA VENTANA
     private void abrirVentana(JFrame ventana) {
     ventana.setVisible(true);
     this.dispose(); // cierra la actual (opcional pero recomendado)
 }
-
+    // CREA EL ENCABEZADO DE LA VENTANA
     private JPanel createHeader() {
+         // Panel principal del encabezado
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
         header.setBorder(new EmptyBorder(5, 5, 10, 5));
@@ -118,7 +121,7 @@ public class InterfazChida extends JFrame {
 
         return header;
     }
-
+     
     private JPanel createSideMenu() {
         JPanel menu = new JPanel();
         menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
@@ -149,9 +152,10 @@ public class InterfazChida extends JFrame {
 
         return menu;
     }
-
+// CREA CADA BOTÓN DEL MENÚ
     private JButton crearBotonMenu(String texto, boolean activo) {
         JButton btn = new JButton(texto);
+         // Personalización del botón
         btn.setAlignmentX(Component.CENTER_ALIGNMENT);
         btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         btn.setHorizontalAlignment(SwingConstants.CENTER);
@@ -162,13 +166,15 @@ public class InterfazChida extends JFrame {
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        // Acción al hacer clic
         btn.addActionListener(e -> navegar(texto));
         return btn;
     }
+    // NAVEGACIÓN ENTRE VENTANAS
     private void navegar(String opcion) {
 
     switch (opcion) {
-
+         // Abre la pantalla correspondiente
         case "Inicio":
             abrirVentana(new Inicio());
             break;
@@ -210,8 +216,9 @@ public class InterfazChida extends JFrame {
             break;
     }
 }
-
+// CREA LA PARTE CENTRAL DE LA INTERFAZ
     private JPanel createCenter() {
+         // Contiene formulario, información y tabla
         JPanel wrapper = new JPanel();
         wrapper.setOpaque(false);
         wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
@@ -229,12 +236,12 @@ public class InterfazChida extends JFrame {
 
         return wrapper;
     }
-
+// CREA EL FORMULARIO DE REGISTRO
     private JPanel createFormCard() {
         RoundedPanel card = new RoundedPanel(20, CARD);
         card.setLayout(new BorderLayout());
         card.setBorder(new EmptyBorder(18, 18, 18, 18));
-
+         // Tarjeta donde se registran los datos del monitoreo
         JLabel section = new JLabel("Registro de Monitoreo");
         section.setFont(sectionFont);
         section.setForeground(GREEN);
@@ -293,7 +300,7 @@ public class InterfazChida extends JFrame {
         JButton btnRegistrar = crearBoton("Registrar", GREEN);
 JButton btnModificar = crearBoton("Modificar", BLUE);
 JButton btnEliminar = crearBoton("Eliminar", RED);
-
+        // Botones de acciones
         btnRegistrar.addActionListener(e -> accionRegistrar());
         btnModificar.addActionListener(e -> accionModificar());
         btnEliminar.addActionListener(e -> accionEliminar());
@@ -308,10 +315,11 @@ JButton btnEliminar = crearBoton("Eliminar", RED);
 
         return card;
     }
+    // CREA BOTONES PERSONALIZADOS
     private JButton crearBoton(String texto, Color color) {
 
     JButton btn = new JButton(texto);
-
+      // Configuración visual
     btn.setFont(new Font("Segoe UI", Font.BOLD, 13));
     btn.setForeground(Color.WHITE); // texto blanco
     btn.setBackground(color);       // color del botón
@@ -325,12 +333,12 @@ JButton btnEliminar = crearBoton("Eliminar", RED);
 
     return btn;
 }
-
+// CREA EL PANEL DE INFORMACIÓN
     private JPanel createInfoCard() {
         RoundedPanel card = new RoundedPanel(20, CARD);
         card.setLayout(new BorderLayout(15, 10));
         card.setBorder(new EmptyBorder(18, 18, 18, 18));
-
+        // Muestra una imagen y la información del monitoreo seleccionado
         JLabel section = new JLabel("Informacion del monitoreo seleccionado");
         section.setFont(sectionFont);
         section.setForeground(GREEN);
@@ -407,8 +415,9 @@ lblImagen.setIcon(new ImageIcon(img));
 
         return card;
     }
-
+// CREA LA TABLA DE REGISTROS
     private JPanel createTableCard() {
+        // Se crea la tabla donde aparecen todos los monitoreos
         RoundedPanel card = new RoundedPanel(20, CARD);
         card.setLayout(new BorderLayout(0, 15));
         card.setBorder(new EmptyBorder(18, 18, 18, 18));
@@ -477,10 +486,9 @@ lblImagen.setIcon(new ImageIcon(img));
         return card;
     }
 
-    // --- METODOS DE LOGICA DE CONTROL ---
-
+  // REGISTRAR UN NUEVO MONITOREO
     private void accionRegistrar() {
-
+    // Verifica que todos los campos estén llenos
     try {
 
         if (txtWaterTemperature.getText().trim().isEmpty()
@@ -493,7 +501,7 @@ lblImagen.setIcon(new ImageIcon(img));
                     "Complete todos los campos.");
             return;
         }
-
+  
         Monitoring monitoring = new Monitoring();
 
         monitoring.setWaterTemperature(
@@ -510,14 +518,14 @@ lblImagen.setIcon(new ImageIcon(img));
 
         monitoring.setPhMeasured(
                 Double.parseDouble(txtPhMeasured.getText().trim()));
-
+         // Guarda el monitoreo en la base de datos
         MonitoringDAO dao = new MonitoringDAO();
-
+          
         if (dao.insertMonitoring(monitoring)) {
 
             JOptionPane.showMessageDialog(this,
                     "Monitoreo registrado correctamente.");
-
+            // Actualiza la tabla y limpia el formulario
             limpiarFormulario();
             cargarTabla();
 
@@ -536,9 +544,9 @@ lblImagen.setIcon(new ImageIcon(img));
     }
 
 }
-
+// MODIFICAR UN MONITOREO
     private void accionModificar() {
-
+     // Verifica que exista un registro seleccionado
     int fila = table.getSelectedRow();
 
     if (fila == -1) {
@@ -571,7 +579,7 @@ lblImagen.setIcon(new ImageIcon(img));
 
         monitoring.setPhMeasured(
                 Double.parseDouble(txtPhMeasured.getText().trim()));
-
+        // Actualiza la información en la base de datos
         MonitoringDAO dao = new MonitoringDAO();
 
         if (dao.updateMonitoring(monitoring)) {
@@ -597,7 +605,7 @@ lblImagen.setIcon(new ImageIcon(img));
     }
 
 }
-
+// ELIMINAR UN MONITOREO
     private void accionEliminar() {
 
     int fila = table.getSelectedRow();
@@ -609,7 +617,7 @@ lblImagen.setIcon(new ImageIcon(img));
 
         return;
     }
-
+      // Solicita confirmación antes de eliminar
     int confirmacion = JOptionPane.showConfirmDialog(this,
             "¿Seguro que quieres eliminar este registro?",
             "Confirmar",
@@ -618,7 +626,7 @@ lblImagen.setIcon(new ImageIcon(img));
     if (confirmacion != JOptionPane.YES_OPTION) {
         return;
     }
-
+     // Elimina el registro seleccionado
     try {
 
         int id = Integer.parseInt(
@@ -647,10 +655,11 @@ lblImagen.setIcon(new ImageIcon(img));
                 "Error al eliminar: " + ex.getMessage());
     }
 }
+    // CARGAR TODOS LOS MONITOREOS
     private void cargarMonitoreos() {
-
+    //Limpia la tabla
     tableModel.setRowCount(0);
-
+     // Agrega nuevamente todos los registros
     for (Monitoring monitoring : monitoringDAO.getAllMonitoring()) {
 
         tableModel.addRow(new Object[]{
@@ -667,7 +676,7 @@ lblImagen.setIcon(new ImageIcon(img));
     }
 
 }
-
+// VALIDAR SI UN TEXTO ES DECIMAL
     private boolean esDecimalValido(String valor) {
         try {
             Double.parseDouble(valor);
@@ -676,13 +685,14 @@ lblImagen.setIcon(new ImageIcon(img));
             return false;
         }
     }
-
+// OBTENER FECHA Y HORA ACTUAL
     private String obtenerFechaHoraActual() {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         return LocalDateTime.now().format(formato);
     }
-
+// CUANDO EL USUARIO SELECCIONA UNA FILA
     private void configurarSeleccionTabla() {
+         // Copia los datos de la tabla al formulario
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int filaSeleccionada = table.getSelectedRow();
@@ -698,10 +708,11 @@ lblImagen.setIcon(new ImageIcon(img));
             }
         });
     }
+// CARGAR LA TABLA DESDE LA BASE DE DATOS
 private void cargarTabla() {
-
+    // Vacía la tabla
     tableModel.setRowCount(0);
-
+    // Consulta todos los registros
     MonitoringDAO dao = new MonitoringDAO();
 
     for (Monitoring monitoring : dao.getAllMonitoring()) {
@@ -720,6 +731,7 @@ private void cargarTabla() {
     }
 
 }
+// LIMPIAR LOS CAMPOS DEL FORMULARIO
     private void limpiarFormulario() {
         txtIdMonitoring.setText("");
         txtWaterTemperature.setText("");
@@ -727,14 +739,15 @@ private void cargarTabla() {
         txtAmbientHumidity.setText("");
         txtEcMeasured.setText("");
         txtPhMeasured.setText("");
+         // Coloca nuevamente la fecha actual
         txtDateTime.setText(obtenerFechaHoraActual());
+        // Deselecciona la tabla
         table.clearSelection();
     }
-
-    // --- METODOS DE ESTILIZACION ---
-
+// CREA UN CAMPO DE TEXTO PERSONALIZADO
     private JTextField styledTextField(String text) {
         JTextField field = new JTextField(text);
+        // Configuración visual
         field.setFont(fieldFont);
         field.setForeground(TEXT);
         field.setBackground(Color.WHITE);
@@ -746,9 +759,10 @@ private void cargarTabla() {
         field.setPreferredSize(new Dimension(220, 36));
         return field;
     }
-
+    // CREA UNA ETIQUETA TIPO BADGE
     private JLabel createBadge(String text) {
         JLabel badge = new JLabel(text);
+          // Estilo del indicador de estado
         badge.setOpaque(true);
         badge.setBackground(BADGE_BG);
         badge.setForeground(BADGE_TEXT);
@@ -756,8 +770,9 @@ private void cargarTabla() {
         badge.setBorder(new EmptyBorder(4, 10, 4, 10));
         return badge;
     }
-
+// MÉTODO PRINCIPAL
     public static void main(String[] args) {
+         // Inicia la aplicación
         SwingUtilities.invokeLater(() -> {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -766,17 +781,17 @@ private void cargarTabla() {
             new InterfazChida().setVisible(true);
         });
     }
-
+// PANEL CON BORDES REDONDEADOS
     static class RoundedPanel extends JPanel {
-        private final int radius;
-        private final Color backgroundColor;
+        private final int radius;  // Radio de las esquinas
+        private final Color backgroundColor;    // Color de fondo
 
         public RoundedPanel(int radius, Color backgroundColor) {
             this.radius = radius;
             this.backgroundColor = backgroundColor;
             setOpaque(false);
         }
-
+ // Dibuja el panel con bordes redondeados y una pequeña sombra
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();

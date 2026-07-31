@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 
 public class SolucionNutritivaPanel extends JFrame {
+    // DAO que permite realizar las operaciones de la tabla nutrient_solution en la base de datos
     private NutrientSolutionDAO solutionDAO = new NutrientSolutionDAO();
-    // ===== Paleta de colores (igual que SistemaHuertoPanel) =====
+    // PALETA DE COLORES
+    // Colores utilizados para mantener un diseño uniforme en toda la interfaz
     private static final Color COLOR_VERDE_PRINCIPAL  = new Color(0x2E7D32); // verde de botón Registrar / título / sidebar
     private static final Color COLOR_AZUL_MODIFICAR   = new Color(0x1565C0); // azul de botón Modificar
     private static final Color COLOR_ROJO_ELIMINAR    = new Color(0xD32F2F); // rojo de botón Eliminar
@@ -36,39 +38,46 @@ public class SolucionNutritivaPanel extends JFrame {
     private static final Color VERDE_OSCURO_SIDEBAR   = new Color(0x2E7D32); // fondo del sidebar (mismo verde principal)
     private static final Color VERDE_ITEM_ACTIVO      = new Color(0x1B5E20); // ítem activo del sidebar
     private static final Color BLANCO                 = Color.WHITE;
-
+    // Fuente utilizada en toda la interfaz
     private static final String FUENTE = "Segoe UI";
+    // Ancho del menú lateral
     private static final int SIDEBAR_ANCHO = 230;
     
-
+// Clase que dibuja iconos personalizados para el menú y botones
     private static class IconoSimple implements Icon {
+         // Tipo de icono, tamaño y color
         private final String tipo;
         private final int size;
         private final Color color;
-
+         // Constructor
         IconoSimple(String tipo, int size, Color color) {
             this.tipo = tipo;
             this.size = size;
             this.color = color;
         }
-
+         // Devuelve el ancho del icono
         @Override public int getIconWidth()  { return size; }
+        // Devuelve el alto del icono
         @Override public int getIconHeight() { return size; }
-
+        // Dibuja el icono según el tipo seleccionado
         @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.translate(x, y);
+             // Activa suavizado de bordes
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setColor(color);
             int s = size;
             g2.setStroke(new BasicStroke(Math.max(1.5f, s / 9f)));
-
+             
+            // Dibuja el icono correspondiente
             switch (tipo) {
+                // Dibuja una casa
                 case "house":
                     g2.fillPolygon(new int[]{s / 2, s - 1, 1}, new int[]{1, s / 2 + 1, s / 2 + 1}, 3);
                     g2.fillRect(s / 4, s / 2, s / 2, s / 2 - 1);
                     break;
+                    // Dibuja una persona
                 case "people":
                     g2.fillOval(1, s / 6, s * 2 / 5, s * 2 / 5);
                     g2.fillOval(s * 2 / 5, s / 6, s * 2 / 5, s * 2 / 5);
@@ -76,12 +85,14 @@ public class SolucionNutritivaPanel extends JFrame {
                     g2.fillArc(s / 3, s / 2, s * 3 / 5, s / 2, 0, 180);
                     break;
                 case "seedling":
+                     // Dibuja una planta
                 case "plant":
                 case "leaf":
                     g2.fillOval(s / 5, s / 8, s * 3 / 5, s * 3 / 5);
                     g2.setStroke(new BasicStroke(1.6f));
                     g2.drawLine(s / 2, s / 2, s / 2, s - 1);
                     break;
+                     // Continúan los demás iconos...
                 case "grid": {
                     int cell = s / 2 - 2;
                     g2.fillRect(1, 1, cell, cell);
@@ -180,63 +191,70 @@ public class SolucionNutritivaPanel extends JFrame {
         }
     }
 
-    // ===== Sidebar deslizable =====
-    private JPanel sidebarWrapper;
-    private JPanel sidebarContenido;
-    private boolean sidebarAbierto = true;
-    private Timer animacionTimer;
+    // VARIABLES DEL SIDEBAR
+    private JPanel sidebarWrapper; // Panel que contiene el menú lateral
+    private JPanel sidebarContenido; // Contenido del menú lateral
+    private boolean sidebarAbierto = true; // Indica si el menú está abierto o cerrado
+    private Timer animacionTimer; // Temporizador para la animación del menú
 
-    // ===== Componentes del formulario =====
-    private JComboBox<String> cbSistemaHuerto;
+   // COMPONENTES DEL FORMULARIO
+    private JComboBox<String> cbSistemaHuerto; // Lista de sistemas de huerto disponibles
+    
+    // Campos para capturar la información
     private JTextField txtFecha;
     private JTextField txtConductividad;
     private JTextField txtTemperatura;
     private JTextField txtPh;
-    private JTextArea  txtObservaciones;
-    private JButton btnRegistrar;
-    private Integer filaEnEdicion = null;
+    
+    private JTextArea  txtObservaciones; // Área de observaciones
+    private JButton btnRegistrar; // Botón principal de registrar
+    private Integer filaEnEdicion = null; // Guarda la fila que se está editando
 
-    // ===== Tabla de historial =====
-    private JTable tablaHistorial;
-    private DefaultTableModel modeloTabla;
-    private JLabel lblRangoRegistros;
-    private JTextField txtBuscar;
-    private int siguienteId = 2;
+    // COMPONENTES DE LA TABLA
+    private JTable tablaHistorial; // Tabla donde se muestran los registros
+    private DefaultTableModel modeloTabla; // Modelo de datos de la tabla
+    private JLabel lblRangoRegistros; // Etiqueta que indica el rango de registros mostrados
+    private JTextField txtBuscar; // Campo para realizar búsquedas
+    private int siguienteId = 2; // Variable para generar IDs consecutivos
 
-    // ===== Panel "Información actual" =====
+   // PANEL DE INFORMACIÓN
+    // Etiquetas donde se muestran los datos del registro seleccionado
     private JLabel lblUltimaFecha;
     private JLabel lblValConductividad;
     private JLabel lblValTemperatura;
     private JLabel lblValPh;
     private JLabel lblValPreparada;
+    // Lista con los sistemas de huerto del usuario
     private ArrayList<HydroponicSystem> sistemas;
 
+    // Constructor principal de la ventana
     public SolucionNutritivaPanel() {
+    // Configuración básica de la ventana
     setTitle("Solucion Nutritiva");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setSize(1360, 1000);
     setLocationRelativeTo(null);
-
+     // Panel principal
     JPanel content = new JPanel(new BorderLayout());
     content.setBackground(COLOR_FONDO);
     setContentPane(content);
-
+     // Panel que contiene el menú lateral
     sidebarWrapper = new JPanel(new BorderLayout());
     sidebarWrapper.setBackground(VERDE_OSCURO_SIDEBAR);
     sidebarWrapper.setPreferredSize(new Dimension(SIDEBAR_ANCHO, 0));
-
+     // Se crea el contenido del menú
     sidebarContenido = crearSidebar();
 
     sidebarWrapper.add(sidebarContenido, BorderLayout.CENTER);
-
+    // Agrega el menú y el contenido principal
     content.add(sidebarWrapper, BorderLayout.WEST);
 
     content.add(crearContenidoPrincipal(), BorderLayout.CENTER);
-
+    // Carga los datos existentes
     cargarTabla();
 }
 
-
+// Crea el menú lateral de navegación
     private JPanel crearSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
@@ -277,7 +295,7 @@ public class SolucionNutritivaPanel extends JFrame {
         sidebar.add(Box.createVerticalGlue());
         return sidebar;
     }
-
+// Crea cada opción del menú lateral
     private JPanel crearItemMenu(String tipoIcono, String texto, boolean activo) {
         final Color colorInactivo = VERDE_OSCURO_SIDEBAR;
 
@@ -379,7 +397,7 @@ public class SolucionNutritivaPanel extends JFrame {
         return item;
     }
 
-    /** Anima el ancho del sidebar entre 0 y SIDEBAR_ANCHO (efecto deslizable). */
+    // Abre o cierra el menú lateral con una animación
     private void toggleSidebar() {
         if (animacionTimer != null && animacionTimer.isRunning()) {
             animacionTimer.stop();
@@ -406,7 +424,7 @@ public class SolucionNutritivaPanel extends JFrame {
         });
         animacionTimer.start();
     }
-
+// Crea todo el contenido principal de la ventana
     private JPanel crearContenidoPrincipal() {
         JPanel contenedor = new JPanel(new BorderLayout(0, 0));
         contenedor.setBackground(COLOR_FONDO);
@@ -433,7 +451,7 @@ public class SolucionNutritivaPanel extends JFrame {
         return contenedor;
     }
 
-  
+  // Crea el encabezado con el título y la información del usuario
     private JPanel crearEncabezado() {
         JPanel panel = new JPanel(new BorderLayout(12, 0));
         panel.setBackground(COLOR_FONDO);
@@ -486,7 +504,7 @@ public class SolucionNutritivaPanel extends JFrame {
         return panel;
     }
 
-
+// Dibuja el avatar del usuario
     private JComponent crearAvatarIcono() {
         JComponent circulo = new JComponent() {
             @Override
@@ -504,7 +522,7 @@ public class SolucionNutritivaPanel extends JFrame {
         return circulo;
     }
 
-
+// Crea el formulario para registrar soluciones nutritivas
     private JPanel crearPanelFormulario() {
         JPanel card = new JPanel(new GridBagLayout());
         card.setBackground(Color.WHITE);
@@ -585,7 +603,7 @@ public class SolucionNutritivaPanel extends JFrame {
 
         return card;
     }
-    
+    // Carga todos los registros desde la base de datos hacia la tabla
     private void cargarTabla() {
 
     modeloTabla.setRowCount(0);
@@ -606,6 +624,7 @@ public class SolucionNutritivaPanel extends JFrame {
     }
 
 }
+    // Obtiene los sistemas de huerto del usuario y llena el ComboBox
     private void cargarSistemas() {
 
     HydroponicSystemDAO dao = new HydroponicSystemDAO();
@@ -626,6 +645,7 @@ public class SolucionNutritivaPanel extends JFrame {
         );
     }
 }
+    // Agrega una etiqueta y su componente correspondiente al formulario
     private void agregarCampo(JPanel panel, GridBagConstraints gbc, int fila, String etiqueta, JComponent campo) {
         gbc.gridx = 0; gbc.gridy = fila; gbc.gridwidth = 1;
         gbc.weightx = 0; gbc.insets = new Insets(6, 4, 6, 4);
@@ -637,7 +657,7 @@ public class SolucionNutritivaPanel extends JFrame {
         gbc.gridx = 1; gbc.weightx = 1.0;
         panel.add(campo, gbc);
     }
-
+// Crea un campo de texto con el estilo de la interfaz
     private JTextField crearTextField(String texto) {
         JTextField tf = new JTextField(texto, 22);
         tf.setFont(new Font(FUENTE, Font.PLAIN, 13));
@@ -648,7 +668,7 @@ public class SolucionNutritivaPanel extends JFrame {
         tf.setPreferredSize(new Dimension(280, 32));
         return tf;
     }
-
+// Aplica el estilo visual al ComboBox
     private void estilizarCombo(JComboBox<?> combo) {
         combo.setFont(new Font(FUENTE, Font.PLAIN, 13));
         combo.setBackground(Color.WHITE);
@@ -656,7 +676,7 @@ public class SolucionNutritivaPanel extends JFrame {
         combo.setPreferredSize(new Dimension(280, 32));
     }
 
-    /** Botón con esquinas redondeadas dibujadas a mano (paintComponent), igual que la referencia. */
+    // Crea un botón con el color indicado
     private JButton crearBoton(String texto, Color color) {
 
     JButton btn = new JButton(texto);
@@ -677,7 +697,7 @@ public class SolucionNutritivaPanel extends JFrame {
     return btn;
 }
 
-    /** Registra una fila nueva, o actualiza la fila en edición si venimos de "Editar"/"Modificar". */
+   // Registra una nueva solución nutritiva o actualiza una existente
    private void onRegistrarClick() {
 
     try {
@@ -777,7 +797,7 @@ actualizarInformacionActual(
     }
 
 }
-   
+   // Limpia todos los campos del formulario
     private void limpiarFormulario() {
         txtFecha.setText("");
         txtConductividad.setText("");
@@ -785,7 +805,7 @@ actualizarInformacionActual(
         txtPh.setText("");
         
     }
-
+// Crea el panel donde se muestra la información del registro seleccionado
     private JPanel crearPanelInformacion() {
         JPanel card = new JPanel();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
@@ -834,7 +854,7 @@ card.add(Box.createVerticalStrut(16));
 
         return card;
     }
-
+// Crea una fila del panel de información
     private JPanel crearFilaInfo(String etiqueta, JLabel valorLabel) {
         JPanel fila = new JPanel(new BorderLayout());
         fila.setBackground(Color.WHITE);
@@ -853,7 +873,7 @@ card.add(Box.createVerticalStrut(16));
         fila.add(valorLabel, BorderLayout.EAST);
         return fila;
     }
-
+// Actualiza los datos del panel de información
     private void actualizarInformacionActual(String sistema, String fecha, String conductividad, String temperatura, String ph) {
 
     System.out.println("ENTRO A INFORMACION ACTUAL");
@@ -870,7 +890,7 @@ card.add(Box.createVerticalStrut(16));
     lblValPh.repaint();
     lblValPreparada.repaint();
 }
-
+// Crea la tabla donde se muestran todas las soluciones registradas
     private JPanel crearPanelHistorial() {
         JPanel card = new JPanel(new BorderLayout(0, 8));
         card.setBackground(Color.WHITE);
@@ -1021,14 +1041,14 @@ tablaHistorial.setRowSorter(sorter);
         actualizarRangoRegistros();
         return card;
     }
-
+// Actualiza el mensaje que indica cuántos registros se muestran
     private void actualizarRangoRegistros() {
         int total = modeloTabla.getRowCount();
         int hasta = Math.min(10, total);
         int desde = total == 0 ? 0 : 1;
         lblRangoRegistros.setText("Mostrando registros del " + desde + " al " + hasta + " de " + total);
     }
-
+// Carga los datos de un registro para poder modificarlo
     private void editarFila(int fila) {
         int id = Integer.parseInt(modeloTabla.getValueAt(fila, 0).toString());
         if (fila < 0 || fila >= modeloTabla.getRowCount()) return;
@@ -1042,7 +1062,7 @@ tablaHistorial.setRowSorter(sorter);
         btnRegistrar.setText("Actualizar");
         btnRegistrar.putClientProperty("idSolution", id);
     }
-
+// Elimina el registro seleccionado de la base de datos
     private void eliminarFila(int fila) {
         if (fila < 0 || fila >= modeloTabla.getRowCount()) return;
         int confirmacion = JOptionPane.showConfirmDialog(this,
@@ -1080,7 +1100,7 @@ tablaHistorial.setRowSorter(sorter);
 }
     }
 
- 
+ // Renderizador que muestra los botones Editar y Eliminar dentro de la tabla
     private class AccionesRenderer extends JPanel implements TableCellRenderer {
         AccionesRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER, 5, 2));
@@ -1097,7 +1117,7 @@ tablaHistorial.setRowSorter(sorter);
             return this;
         }
     }
-
+// Editor que permite utilizar los botones de la tabla
     private class AccionesEditor extends AbstractCellEditor implements TableCellEditor {
         private final JPanel panel;
         private int filaActual;
@@ -1134,7 +1154,7 @@ tablaHistorial.setRowSorter(sorter);
         public Object getCellEditorValue() { return ""; }
     }
 
-    /** Botón chico redondeado para usar dentro de las celdas de la tabla. */
+  // Crea los botones utilizados dentro de la tabla
    private JButton crearBotonTabla(String texto, Color color) {
 
     JButton btn = new JButton(texto);
@@ -1154,6 +1174,7 @@ tablaHistorial.setRowSorter(sorter);
 
     return btn;
 }
+   // Filtra los registros de la tabla según el texto escrito en el buscador
 private void filtrarTabla() {
 
     String texto = txtBuscar.getText();
@@ -1172,6 +1193,7 @@ private void filtrarTabla() {
         );
     }
 }
+// Muestra en el panel de información los datos del registro seleccionado
 private void mostrarDatosSeleccionados() {
 
     int fila = tablaHistorial.getSelectedRow();
@@ -1198,7 +1220,7 @@ private void mostrarDatosSeleccionados() {
     lblValPreparada.setText(sistema);
 
 }
-
+// Método principal que inicia la aplicación
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
