@@ -267,7 +267,7 @@ public class planta extends javax.swing.JFrame {
 
             return;
     }
-
+// Carga y ajusta la imagen al tamaño del JLabel.
     java.net.URL url = getClass().getResource(ruta);
 
     if (url == null) {
@@ -903,18 +903,18 @@ public class planta extends javax.swing.JFrame {
     private void txtnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtnameActionPerformed
-
+// Registra una nueva planta en la base de datos.
     private void btnregisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnregisterActionPerformed
         // TODO add your handling code here:
 
     
     User user = session.getCurrentUser();
-
+// Verifica que exista una sesión iniciada.
     if (user == null) {
         JOptionPane.showMessageDialog(this, "No hay una sesión activa.");
         return;
     }
-
+// Comprueba que todos los campos estén completos.
     if (txtname.getText().trim().isEmpty()
             || txtvariety.getText().trim().isEmpty()
             || txtharvest.getText().trim().isEmpty()
@@ -937,7 +937,7 @@ public class planta extends javax.swing.JFrame {
 
     System.out.println("ID del sistema: " + id);
 
-    
+    // Crea el objeto Plant con los datos capturados.
     Plant plant = new Plant();
     plant.setNamePlant(txtname.getText().trim());
     plant.setVariety(txtvariety.getText().trim());
@@ -947,11 +947,11 @@ public class planta extends javax.swing.JFrame {
 
     
     plant.setSystemId(id);
-
+// Guarda la planta en la base de datos.
     PlantDAO dao = new PlantDAO();
 
     if (dao.insertPlant(plant)) {
-
+// Si el registro fue exitoso, actualiza la tabla y limpia los campos.
         JOptionPane.showMessageDialog(this, "Planta registrada correctamente.");
 
         cargarTabla();
@@ -965,11 +965,11 @@ public class planta extends javax.swing.JFrame {
     } else {
         JOptionPane.showMessageDialog(this, "No fue posible registrar la planta.");
     }
-
+// Muestra la imagen correspondiente a la planta registrada.
     mostrarImagen();
 
     }//GEN-LAST:event_btnregisterActionPerformed
-
+// Busca plantas por nombre o variedad.
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
         // TODO add your handling code here:
 
@@ -993,7 +993,7 @@ public class planta extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Escribe algo para buscar.");
         return;
     }
-
+// Realiza la búsqueda dentro del sistema seleccionado.
     PlantDAO dao = new PlantDAO();
 
     ArrayList<Plant> lista =
@@ -1006,7 +1006,7 @@ public class planta extends javax.swing.JFrame {
             (DefaultTableModel) jTable1.getModel();
 
     modelo.setRowCount(0);
-
+// Muestra los resultados encontrados en la tabla.
     for (Plant plant : lista) {
 
         modelo.addRow(new Object[]{
@@ -1025,7 +1025,7 @@ public class planta extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_txtBuscarActionPerformed
-
+// Elimina la planta seleccionada de la base de datos.
     private void btndeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndeleteActionPerformed
         // TODO add your handling code here:
 
@@ -1035,7 +1035,7 @@ public class planta extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Selecciona una planta primero.");
         return;
     }
-
+// Solicita confirmación antes de eliminar.
     int confirm = JOptionPane.showConfirmDialog(
             this,
             "¿Seguro que quieres eliminar esta planta?",
@@ -1050,7 +1050,7 @@ public class planta extends javax.swing.JFrame {
     int idPlant = Integer.parseInt(
             jTable1.getValueAt(fila, 0).toString()
     );
-
+// Elimina el registro seleccionado.
     PlantDAO dao = new PlantDAO();
 
     if (dao.deletePlant(idPlant)) {
@@ -1080,7 +1080,7 @@ public class planta extends javax.swing.JFrame {
     private void solutionBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_solutionBtn1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_solutionBtn1ActionPerformed
-
+// Carga los datos de la fila seleccionada en los campos del formulario.
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
         int fila = jTable1.getSelectedRow();
@@ -1090,22 +1090,25 @@ public class planta extends javax.swing.JFrame {
     txtharvest.setText(jTable1.getValueAt(fila, 3).toString());
     txtphmax.setText(jTable1.getValueAt(fila, 4).toString());
     txtphmin.setText(jTable1.getValueAt(fila, 5).toString());
+    // Muestra la imagen correspondiente a la planta seleccionada.
         mostrarImagen();
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void btnmenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmenuActionPerformed
         // TODO add your handling code here:
+        // Abre o cierra el menú lateral.
         animarMenu();
     }//GEN-LAST:event_btnmenuActionPerformed
-
+// Actualiza la información de una planta existente.
     private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
         // TODO add your handling code here:
+        // Selecciona una tabla
         if(idplant.getText().trim().isEmpty()){
         JOptionPane.showMessageDialog(this,
                 "Selecciona una planta de la tabla.");
         return;
     }
-
+// Crea un objeto Plant con los nuevos datos.
     Plant p = new Plant();
 
     p.setPlantId(Integer.parseInt(idplant.getText()));
@@ -1115,12 +1118,12 @@ public class planta extends javax.swing.JFrame {
     p.setPhIdealMax(Double.parseDouble(txtphmax.getText()));
     p.setPhIdealMin(Double.parseDouble(txtphmin.getText()));
 
-
+// Envía la actualización a la base de datos.
     PlantDAO dao = new PlantDAO();
 
 
     if(dao.updatePlant(p)){
-
+// Si la modificación fue correcta, actualiza la tabla.
         JOptionPane.showMessageDialog(this,
                 "Planta modificada correctamente.");
 
