@@ -29,7 +29,7 @@ public class InterfazChida extends JFrame {
     private final Font labelFont = new Font("Segoe UI", Font.PLAIN, 13);
     private final Font fieldFont = new Font("Segoe UI", Font.PLAIN, 13);
 
-    
+    // --- ATRIBUTOS DE CLASE PARA MANEJAR LOS DATOS (segun tabla monitoring) ---
     private JTextField txtIdMonitoring;
     private JTextField txtWaterTemperature;
     private JTextField txtAmbientTemperature;
@@ -37,6 +37,7 @@ public class InterfazChida extends JFrame {
     private JTextField txtEcMeasured;
     private JTextField txtPhMeasured;
     private JTextField txtDateTime;
+    private JLabel lblImagen;
 
     private JTable table;
     private DefaultTableModel tableModel;
@@ -161,7 +162,7 @@ public class InterfazChida extends JFrame {
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-       btn.addActionListener(e -> navegar(texto));
+        btn.addActionListener(e -> navegar(texto));
         return btn;
     }
     private void navegar(String opcion) {
@@ -263,7 +264,7 @@ public class InterfazChida extends JFrame {
         txtEcMeasured = styledTextField("");
         txtPhMeasured = styledTextField("");
 
-        
+        // date_time tiene default current_timestamp, se autocompleta pero es editable
         txtDateTime = styledTextField(obtenerFechaHoraActual());
 
         JComponent[] fields = {
@@ -289,9 +290,9 @@ public class InterfazChida extends JFrame {
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 15));
         buttons.setOpaque(false);
 
-        RoundedButton btnRegistrar = new RoundedButton("Registrar", GREEN);
-        RoundedButton btnModificar = new RoundedButton("Modificar", BLUE);
-        RoundedButton btnEliminar = new RoundedButton("Eliminar", RED);
+        JButton btnRegistrar = crearBoton("Registrar", GREEN);
+JButton btnModificar = crearBoton("Modificar", BLUE);
+JButton btnEliminar = crearBoton("Eliminar", RED);
 
         btnRegistrar.addActionListener(e -> accionRegistrar());
         btnModificar.addActionListener(e -> accionModificar());
@@ -307,6 +308,23 @@ public class InterfazChida extends JFrame {
 
         return card;
     }
+    private JButton crearBoton(String texto, Color color) {
+
+    JButton btn = new JButton(texto);
+
+    btn.setFont(new Font("Segoe UI", Font.BOLD, 13));
+    btn.setForeground(Color.WHITE); // texto blanco
+    btn.setBackground(color);       // color del botón
+
+    btn.setOpaque(true);
+    btn.setBorderPainted(false);
+    btn.setFocusPainted(false);
+
+    btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    btn.setPreferredSize(new Dimension(120, 38));
+
+    return btn;
+}
 
     private JPanel createInfoCard() {
         RoundedPanel card = new RoundedPanel(20, CARD);
@@ -320,12 +338,19 @@ public class InterfazChida extends JFrame {
         JPanel body = new JPanel(new GridLayout(1, 2, 15, 0));
         body.setOpaque(false);
 
-        JLabel imagePlaceholder = new JLabel("Imagen", SwingConstants.CENTER);
-        imagePlaceholder.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        imagePlaceholder.setForeground(MUTED);
-        imagePlaceholder.setOpaque(true);
-        imagePlaceholder.setBackground(new Color(230, 240, 230));
-        imagePlaceholder.setBorder(new LineBorder(BORDER, 1, true));
+        lblImagen = new JLabel("", SwingConstants.CENTER);
+lblImagen.setOpaque(true);
+lblImagen.setBackground(new Color(230, 240, 230));
+lblImagen.setBorder(new LineBorder(BORDER, 1, true));
+
+ImageIcon icon = new ImageIcon(getClass().getResource("/imagen/lechuga.jpg"));
+
+Image img = icon.getImage().getScaledInstance(
+        250,
+        250,
+        Image.SCALE_SMOOTH);
+
+lblImagen.setIcon(new ImageIcon(img));
 
         JPanel details = new JPanel(new GridBagLayout());
         details.setOpaque(false);
@@ -374,7 +399,7 @@ public class InterfazChida extends JFrame {
             details.add(v, gbc);
         }
 
-        body.add(imagePlaceholder);
+       body.add(lblImagen);
         body.add(details);
 
         card.add(section, BorderLayout.NORTH);
@@ -765,34 +790,6 @@ private void cargarTabla() {
 
             g2.dispose();
             super.paintComponent(g);
-        }
-    }
-
-    static class RoundedButton extends JButton {
-        private final Color bgColor;
-
-        public RoundedButton(String text, Color bgColor) {
-            super(text);
-            this.bgColor = bgColor;
-            setForeground(Color.WHITE);
-            setFont(new Font("Segoe UI", Font.BOLD, 13));
-            setFocusPainted(false);
-            setBorderPainted(false);
-            setContentAreaFilled(false);
-            setCursor(new Cursor(Cursor.HAND_CURSOR));
-            setPreferredSize(new Dimension(120, 38));
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            g2.setColor(bgColor);
-            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
-
-            super.paintComponent(g);
-            g2.dispose();
         }
     }
 }
