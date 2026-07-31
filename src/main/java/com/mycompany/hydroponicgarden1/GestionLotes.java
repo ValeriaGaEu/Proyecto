@@ -39,7 +39,7 @@ public class GestionLotes extends JFrame {
     private final Font labelFont = new Font("Segoe UI", Font.PLAIN, 13);
     private final Font fieldFont = new Font("Segoe UI", Font.PLAIN, 13);
 
-   
+    // --- NUEVOS ATRIBUTOS DE CLASE PARA MANEJAR LOS DATOS ---
     private JTextField txtIdLote;
     private JComboBox<String> cmbSistema;
     private JComboBox<String> cmbPlanta;
@@ -52,6 +52,7 @@ public class GestionLotes extends JFrame {
     private JLabel lblCantidad;
     private JLabel lblEstado;
     private JLabel lblFecha;
+    private JLabel lblImagen;
     
     private JTable table;
     private DefaultTableModel tableModel;
@@ -74,11 +75,11 @@ public class GestionLotes extends JFrame {
         content.add(createSideMenu(), BorderLayout.WEST);
         content.add(createCenter(), BorderLayout.CENTER);
         
-        
+        // Configurar el evento de selección de la tabla al iniciar
         configurarSeleccionTabla();
 
     cargarSistemas();
-
+    cargarTabla();
     cmbSistema.addActionListener(e -> {
 
         cargarPlantas();
@@ -91,7 +92,8 @@ public class GestionLotes extends JFrame {
     switch (opcion) {
 
         case "Inicio":
-            JOptionPane.showMessageDialog(this, "Ir a Inicio");
+            new Inicio().setVisible(true);
+            this.dispose();
             break;
 
         case "Sistema Huerto":
@@ -441,9 +443,9 @@ public class GestionLotes extends JFrame {
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 15));
         buttons.setOpaque(false);
 
-        RoundedButton btnRegistrar = new RoundedButton("Registrar", GREEN);
-        RoundedButton btnModificar = new RoundedButton("Modificar", BLUE);
-        RoundedButton btnEliminar = new RoundedButton("Eliminar", RED);
+        JButton btnRegistrar = crearBoton("Registrar", GREEN);
+JButton btnModificar = crearBoton("Modificar", BLUE);
+JButton btnEliminar = crearBoton("Eliminar", RED);
 
         // --- ASIGNACIÓN DE ACCIONES A LOS BOTONES ---
         btnRegistrar.addActionListener(e -> accionRegistrar());
@@ -460,7 +462,23 @@ public class GestionLotes extends JFrame {
 
         return card;
     }
+private JButton crearBoton(String texto, Color color) {
 
+    JButton btn = new JButton(texto);
+
+    btn.setFont(new Font("Segoe UI", Font.BOLD, 13));
+    btn.setForeground(Color.WHITE); // texto blanco
+    btn.setBackground(color);       // color del botón
+
+    btn.setOpaque(true);
+    btn.setBorderPainted(false);
+    btn.setFocusPainted(false);
+
+    btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    btn.setPreferredSize(new Dimension(120, 38));
+
+    return btn;
+}
 private JPanel createInfoCard() {
 
     RoundedPanel card = new RoundedPanel(20, CARD);
@@ -474,11 +492,11 @@ private JPanel createInfoCard() {
     JPanel body = new JPanel(new GridLayout(1,2,15,0));
     body.setOpaque(false);
 
-    JLabel imagePlaceholder = new JLabel("Imagen", SwingConstants.CENTER);
-    imagePlaceholder.setFont(new Font("Segoe UI", Font.BOLD,18));
-    imagePlaceholder.setOpaque(true);
-    imagePlaceholder.setBackground(new Color(230,240,230));
-    imagePlaceholder.setBorder(new LineBorder(BORDER,1,true));
+    lblImagen = new JLabel("", SwingConstants.CENTER);
+lblImagen.setOpaque(true);
+lblImagen.setBackground(new Color(230,240,230));
+lblImagen.setBorder(new LineBorder(BORDER,1,true));
+lblImagen.setPreferredSize(new Dimension(250,250));
 
     JPanel details = new JPanel(new GridBagLayout());
     details.setOpaque(false);
@@ -530,7 +548,7 @@ private JPanel createInfoCard() {
     gbc.gridx=1;
     details.add(lblFecha,gbc);
 
-    body.add(imagePlaceholder);
+    body.add(lblImagen);
     body.add(details);
 
     card.add(section, BorderLayout.NORTH);
@@ -569,14 +587,15 @@ private JPanel createInfoCard() {
         top.add(search, BorderLayout.EAST);
 
         String[] columns = {
-                "ID Lote", "Sistema de Huerto", "Planta", "Cantidad",
-                "Estado", "Fecha de Siembra", "Dias Transcurridos",
-                "Fecha Estimada de Cosecha", "Acciones"
-        };
+    "ID Lote",
+    "Sistema de Huerto",
+    "Planta",
+    "Cantidad",
+    "Estado",
+    "Fecha de Siembra"
+};
 
         Object[][] rows = {
-                {"8", "Invernadero Secundario (ID: 3)", "Lechuga - Batavia (ID: 1)", "120",
-                        "En crecimiento", "23/05/2025", "2 dias", "07/07/2025", "Editar  Eliminar"}
         };
 
         // Asignamos el modelo y la tabla a los atributos globales de la clase
@@ -611,7 +630,7 @@ private JPanel createInfoCard() {
         return card;
     }
 
- 
+    // --- MÉTODOS DE LÓGICA DE CONTROL ---
 
     private void accionRegistrar() {
 
@@ -858,17 +877,34 @@ if (batch != null) {
 
     for (Plant p : plantas) {
 
-        if (p.getPlantId() == batch.getPlantId()) {
-            lblPlanta.setText(p.getNamePlant());
-            break;
-        }
+    if (p.getPlantId() == batch.getPlantId()) {
+
+        lblPlanta.setText(p.getNamePlant());
+
+        mostrarImagenPlanta(p.getNamePlant());   // <-- FALTA ESTA LÍNEA
+
+        break;
+    }
+
     }
 
     lblCantidad.setText(String.valueOf(batch.getQuantity()));
     lblEstado.setText(batch.getState());
     lblFecha.setText(batch.getPlantingDate().toString());
 }
+    private void mostrarImagenPlanta(String nombrePlanta) {
 
+    ImageIcon icon = new ImageIcon(
+            getClass().getResource("/imagen/lechuga.jpg"));
+
+    Image img = icon.getImage().getScaledInstance(
+            220,
+            220,
+            Image.SCALE_SMOOTH);
+
+    lblImagen.setIcon(new ImageIcon(img));
+    lblImagen.setText("");
+}
     private void limpiarFormulario() {
         txtIdLote.setText("");
         txtCantidad.setText("");
@@ -970,31 +1006,4 @@ if (batch != null) {
         }
     }
 
-    static class RoundedButton extends JButton {
-        private final Color bgColor;
-
-        public RoundedButton(String text, Color bgColor) {
-            super(text);
-            this.bgColor = bgColor;
-            setForeground(Color.WHITE);
-            setFont(new Font("Segoe UI", Font.BOLD, 13));
-            setFocusPainted(false);
-            setBorderPainted(false);
-            setContentAreaFilled(false);
-            setCursor(new Cursor(Cursor.HAND_CURSOR));
-            setPreferredSize(new Dimension(120, 38));
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            g2.setColor(bgColor);
-            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
-
-            super.paintComponent(g);
-            g2.dispose();
-        }
-    }
 }
