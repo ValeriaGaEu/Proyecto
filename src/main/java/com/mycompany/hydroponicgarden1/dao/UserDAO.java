@@ -23,6 +23,7 @@ import java.sql.SQLException;
  */
 public class UserDAO {
 
+    
     // Database connection
     private Connection connection;
 
@@ -33,6 +34,7 @@ public class UserDAO {
         connection = DatabaseConnection.getConnection();
     }
 
+
     /**
  * Registers a new user into the database.
  *
@@ -40,8 +42,7 @@ public class UserDAO {
  * @return true if the user was registered successfully.
  */
 public boolean registerUser(User user) {
-
-    String sql = """
+String sql = """
         INSERT INTO record
         (name_user, last_name, birthdate, phone_mail, password_user)
         VALUES (?, ?, ?, ?, ?)
@@ -152,6 +153,7 @@ public User getUser(String emailOrPhone) {
  */
 public boolean updateUser(User user) {
 
+   
     String sql = """
             UPDATE record
             SET name_user = ?,
@@ -219,6 +221,7 @@ public boolean updatePassword(int userId, String password) {
  */
 public boolean deleteUser(int userId) {
 
+   
     String sql = "DELETE FROM record WHERE id_user = ?";
 
     try {
@@ -234,7 +237,7 @@ public boolean deleteUser(int userId) {
         System.out.println("Delete Error: " + e.getMessage());
         return false;
 
-    }
+    } 
 }
 public User findByEmailOrPhone(String value) {
 
@@ -266,4 +269,3 @@ public User findByEmailOrPhone(String value) {
     return user;
 }
 }
-

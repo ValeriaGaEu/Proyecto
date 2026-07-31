@@ -21,71 +21,68 @@ public class Record extends javax.swing.JFrame {
      * Creates new form Record
      */
     public Record() {
-        initComponents();
+       initComponents();
+        // Cargar el icono del nombre
         ImageIcon name = new ImageIcon(getClass().getResource("/img/userimg.png"));
         jLabel7.setIcon(new ImageIcon(
-        name.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)
+        name.getImage().getScaledInstance(35, 44, Image.SCALE_SMOOTH)
 ));
+        // Cargar el icono de la contraseña
         ImageIcon pass = new ImageIcon(getClass().getResource("/img/passimg.png"));
         jLabel9.setIcon(new ImageIcon(
-        pass.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)
+        pass.getImage().getScaledInstance(55, 44, Image.SCALE_SMOOTH)
 ));
+        // Cargar el icono para confirmar la contraseña
         ImageIcon pass1 = new ImageIcon(getClass().getResource("/img/passimg.png"));
         jLabel10.setIcon(new ImageIcon(
         pass1.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)
 ));
  
     
+        // Llenar los ComboBox con los días, meses y años disponibles
         loadDays();
         loadMonths();
         loadYears();
         validateFields();
         buildBirthDate();
         clearFields();
+        // Cambiar el cursor al pasar sobre el enlace "Ya tengo cuenta"
         lblLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     }
-    /**
- * Loads the day ComboBox.
- */
+// Llenar los ComboBox con la fecha de nacimiento
 private void loadDays() {
-
+     
     cmbDay.removeAllItems();
-
+    // Agregar los días del 1 al 31
     for (int day = 1; day <= 31; day++) {
+        // Eliminar los elementos existentes
         cmbDay.addItem(String.format("%02d", day));
     }
 }
 
-/**
- * Loads the month ComboBox.
- */
+//Llena el ComboBox con los meses del año.
 private void loadMonths() {
-
+    // Limpiar el ComboBox
     cmbMonth.removeAllItems();
-
+    // Agregar los meses del año
     for (int month = 1; month <= 12; month++) {
         cmbMonth.addItem(String.format("%02d", month));
     }
 }
 
-/**
- * Loads the year ComboBox.
- */
+
+//Llena el ComboBox con los años disponibles.
 private void loadYears() {
-
+    // Limpiar el ComboBox
     cmbYear.removeAllItems();
-
+    // Agregar los años permitidos
     for (int year = 1980; year <= 2026; year++) {
         cmbYear.addItem(String.valueOf(year));
     }
 }
-/**
- * Validates the registration fields.
- *
- * @return true if all fields are valid.
- */
+// Verifica que todos los campos del formulario estén completos y que las contraseñas coincidan.
 private boolean validateFields() {
-
+    // Verificar que todos los campos estén llenos
     if (txtFirstName.getText().trim().isEmpty()
             || txtLastName.getText().trim().isEmpty()
             || txtEmailOrPhone.getText().trim().isEmpty()
@@ -100,7 +97,7 @@ private boolean validateFields() {
 
         return false;
     }
-
+    // Verificar que ambas contraseñas sean iguales
     if (!String.valueOf(txtPassword.getPassword())
             .equals(String.valueOf(txtConfirmPassword.getPassword()))) {
 
@@ -112,35 +109,30 @@ private boolean validateFields() {
 
         return false;
     }
-
+   // Todos los datos son correctos
     return true;
 }
-/**
- * Builds the birth date from the ComboBoxes.
- *
- * @return User birth date.
- */
+//Construye la fecha de nacimiento utilizando el día, mes y año seleccionados.
 private Date buildBirthDate() {
-
+    // Crear la fecha en formato YYYY-MM-DD
     String birthDate = cmbYear.getSelectedItem().toString()
             + "-"
             + cmbMonth.getSelectedItem().toString()
             + "-"
             + cmbDay.getSelectedItem().toString();
-
+    // Convertir la cadena en un objeto Date
     return Date.valueOf(birthDate);
 }
-/**
- * Clears all registration fields.
- */
-private void clearFields() {
 
+// Limpia todos los campos del formulario.
+private void clearFields() {
+    // Vaciar los campos de texto
     txtFirstName.setText("");
     txtLastName.setText("");
     txtEmailOrPhone.setText("");
     txtPassword.setText("");
     txtConfirmPassword.setText("");
-
+    // Reiniciar los ComboBox
     cmbDay.setSelectedIndex(0);
     cmbMonth.setSelectedIndex(0);
     cmbYear.setSelectedIndex(0);
@@ -443,38 +435,39 @@ private void clearFields() {
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         // TODO add your handling code here:                                           
-         // Validate all fields
+         // Validar que todos los campos sean correctos
     if (!validateFields()) {
         return;
     }
 
-    // Create a new user object
+    // Crear un nuevo objeto Usuario
     User user = new User();
-
+    
+    // Asignar la información ingresada al usuario
     user.setFirstName(txtFirstName.getText().trim());
     user.setLastName(txtLastName.getText().trim());
     user.setEmailOrPhone(txtEmailOrPhone.getText().trim());
     user.setBirthDate(buildBirthDate());
     user.setPassword(String.valueOf(txtPassword.getPassword()));
 
-    // Create DAO object
+    // Crear el objeto encargado de acceder a la base de datos
     UserDAO userDAO = new UserDAO();
 
-    // Save user into database
+    // Registrar el usuario en la base de datos
     if (userDAO.registerUser(user)) {
 
     JOptionPane.showMessageDialog(
             this,
             "Usuario registrado correctamente.");
 
-    // Clear all fields
+    // Limpiar los campos después del registro
     clearFields();
 
-    // Open Login window
+    // Abrir la ventana de inicio de sesión
     Login login = new Login();
     login.setVisible(true);
 
-    // Close current window
+   // Cerrar la ventana actual
     this.dispose();
 
 } else {
@@ -493,24 +486,23 @@ private void clearFields() {
 
     private void lblLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLoginMouseClicked
         // TODO add your handling code here:
-        
-    // Open Login window
+    // Abrir la ventana de inicio de sesión
     Login login = new Login();
     login.setVisible(true);
 
-    // Close current window
+   // Cerrar la ventana de registro
     this.dispose();
     }//GEN-LAST:event_lblLoginMouseClicked
 
     private void lblLoginMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLoginMouseEntered
         // TODO add your handling code here:
-         // Change text color when the mouse enters
+         // Cambiar el color del texto cuando el ratón entra
     lblLogin.setForeground(new java.awt.Color(0, 153, 0));
     }//GEN-LAST:event_lblLoginMouseEntered
 
     private void lblLoginMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLoginMouseExited
         // TODO add your handling code here:
-        // Restore original text color
+         // Devuelve el original texto de color
     lblLogin.setForeground(new java.awt.Color(102, 204, 0));
     }//GEN-LAST:event_lblLoginMouseExited
 

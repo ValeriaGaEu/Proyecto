@@ -28,7 +28,7 @@ public class Login extends javax.swing.JFrame {
        // Logo principal
 ImageIcon logo = new ImageIcon(getClass().getResource("/img/iconito.jpg"));
 jLabel9.setIcon(new ImageIcon(
-    logo.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH)
+    logo.getImage().getScaledInstance(120, 103, Image.SCALE_SMOOTH)
 ));
 
 // Imagen de usuario
@@ -82,7 +82,7 @@ txtPassword.addFocusListener(new FocusAdapter() {
         }
     }
 });
-    }
+}
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -306,16 +306,17 @@ txtPassword.addFocusListener(new FocusAdapter() {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
         // Get user input
+// Obtener los datos ingresados por el usuario
 String emailOrPhone = txtEmailOrPhone.getText().trim();
 String password = new String(txtPassword.getPassword());
-
+// Verificar que los campos no estén vacíos
 if (emailOrPhone.isEmpty()
         || emailOrPhone.equals("Ingresa tu correo o télefono")
         || password.isEmpty()
         || password.equals("Ingresa la contraseña")) {
 }
 
-// Authenticate user
+// Autenticar el usuario
 UserDAO userDAO = new UserDAO();
 
 if (userDAO.login(emailOrPhone, password)) {
@@ -323,21 +324,21 @@ if (userDAO.login(emailOrPhone, password)) {
     // Get the logged-in user
     User user = userDAO.getUser(emailOrPhone);
 
-    // Save user in session
+    //Guarda el user en sesion
     session.setCurrentUser(user);
 
     JOptionPane.showMessageDialog(
             this,
             "Bienvenido.");
 
-    // Open home window
-   new Inicio().setVisible(true);
+    // Abre la ventana
+    new Inicio().setVisible(true);
 
-    // Close login window
+    // cierra login ventana
     dispose();
 
 } else {
-
+ //si ingresa el correo mal manda mensaje de error
     JOptionPane.showMessageDialog(
             this,
             "Correo, teléfono o contraseña incorrectos.");
@@ -351,9 +352,9 @@ if (userDAO.login(emailOrPhone, password)) {
     }//GEN-LAST:event_txtEmailOrPhoneActionPerformed
 
     private void lblForgotPasswordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForgotPasswordMouseClicked
-        // TODO add your handling code here:
+        // Obtener el correo o teléfono escrito por el usuario
     String emailOrPhone = txtEmailOrPhone.getText().trim();
-
+// Verificar que el campo no esté vacío
 if (emailOrPhone.isEmpty()
         || emailOrPhone.equals("Ingresa tu correo o télefono")) {
 
@@ -363,11 +364,11 @@ if (emailOrPhone.isEmpty()
 
     return;
 }
-
+// Buscar el usuario en la base de datos
 UserDAO dao = new UserDAO();
 
 User user = dao.getUser(emailOrPhone);
-
+// Mostrar mensaje de error si las credenciales son incorrectas
 if (user == null) {
 
     JOptionPane.showMessageDialog(
@@ -376,17 +377,18 @@ if (user == null) {
 
     return;
 }
-
+// Abrir la ventana para cambiar la contraseña
 new new_password(user).setVisible(true);
-
+// Cerrar la ventana actual
 dispose();
     }//GEN-LAST:event_lblForgotPasswordMouseClicked
 
     private void lblRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRegisterMouseClicked
         // TODO add your handling code here
+    // Crear y mostrar la ventana de registro
     Record registro = new Record();
     registro.setVisible(true);
-    this.dispose();
+    this.dispose(); // cierra el JFrame actual
     }//GEN-LAST:event_lblRegisterMouseClicked
 
     /**
