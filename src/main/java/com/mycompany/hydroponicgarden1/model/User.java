@@ -11,39 +11,28 @@ import java.sql.Date;
  *
  * @author Valeria
  */
-public class User {
+public class User extends Person {
 
     // User unique identifier
     private int userId;
-
-    // User first name
-    private String firstName;
-
-    // User last name
-    private String lastName;
-
-    // User birth date
-    private Date birthDate;
-
-    // User email or phone number
-    private String emailOrPhone;
-
     // User password
     private String password;
-
     public User() {
-    }
+        super();
+}
 
-    public User(int userId, String firstName, String lastName,
-            Date birthDate, String emailOrPhone, String password) {
+    public User(int userId,
+        String firstName,
+        String lastName,
+        Date birthDate,
+        String emailOrPhone,
+        String password) {
 
-        this.userId = userId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.emailOrPhone = emailOrPhone;
-        this.password = password;
-    }
+    super(firstName, lastName, birthDate, emailOrPhone);
+
+    this.userId = userId;
+    this.password = password;
+}
 
     public int getUserId() {
         return userId;
@@ -52,39 +41,6 @@ public class User {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getEmailOrPhone() {
-        return emailOrPhone;
-    }
-
-    public void setEmailOrPhone(String emailOrPhone) {
-        this.emailOrPhone = emailOrPhone;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -92,5 +48,15 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+@Override
+public String mostrarInformacion() {
 
+    return "Usuario: "
+            + getFirstName()
+            + " "
+            + getLastName()
+            + " | Contacto: "
+            + getEmailOrPhone();
+
+}
 }
