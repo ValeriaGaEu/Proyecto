@@ -393,7 +393,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jButton3.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Eliminar");
-        jButton3.setActionCommand("Eliminar");
         jButton3.addActionListener(this::jButton3ActionPerformed);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -441,39 +440,46 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelMenu.setForeground(new java.awt.Color(0, 102, 0));
 
         homeBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        homeBtn1.setForeground(new java.awt.Color(255, 255, 255));
         homeBtn1.setText("Inicio");
         homeBtn1.setBorderPainted(false);
         homeBtn1.setFocusPainted(false);
 
         systemBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        systemBtn1.setForeground(new java.awt.Color(255, 255, 255));
         systemBtn1.setText("Sistema Huerto");
         systemBtn1.setBorderPainted(false);
         systemBtn1.setFocusPainted(false);
         systemBtn1.addActionListener(this::systemBtn1ActionPerformed);
 
         plantBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        plantBtn1.setForeground(new java.awt.Color(255, 255, 255));
         plantBtn1.setText("Plantas");
         plantBtn1.setBorderPainted(false);
         plantBtn1.setFocusPainted(false);
 
         perfilBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        perfilBtn1.setForeground(new java.awt.Color(255, 255, 255));
         perfilBtn1.setText("Mi perfil");
         perfilBtn1.setBorderPainted(false);
         perfilBtn1.setFocusPainted(false);
         perfilBtn1.addActionListener(this::perfilBtn1ActionPerformed);
 
         monitoreoBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        monitoreoBtn1.setForeground(new java.awt.Color(255, 255, 255));
         monitoreoBtn1.setText("Monitoreo");
         monitoreoBtn1.setBorderPainted(false);
         monitoreoBtn1.setFocusPainted(false);
 
         solutionBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        solutionBtn1.setForeground(new java.awt.Color(255, 255, 255));
         solutionBtn1.setText("Solucion Nutritiva");
         solutionBtn1.setBorderPainted(false);
         solutionBtn1.setFocusPainted(false);
         solutionBtn1.addActionListener(this::solutionBtn1ActionPerformed);
 
         loteBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        loteBtn1.setForeground(new java.awt.Color(255, 255, 255));
         loteBtn1.setText("Lote");
         loteBtn1.setBorderPainted(false);
         loteBtn1.setFocusPainted(false);
@@ -484,6 +490,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         homeBtn8.setFocusPainted(false);
 
         CloseBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        CloseBtn1.setForeground(new java.awt.Color(255, 255, 255));
         CloseBtn1.setText("Cerrar Sesion");
         CloseBtn1.setBorderPainted(false);
         CloseBtn1.setFocusPainted(false);
@@ -527,9 +534,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(solutionBtn1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(perfilBtn1)
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 167, Short.MAX_VALUE)
                 .addComponent(CloseBtn1)
-                .addContainerGap(183, Short.MAX_VALUE))
+                .addGap(28, 28, 28))
             .addGroup(panelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelMenuLayout.createSequentialGroup()
                     .addGap(198, 198, 198)
@@ -687,28 +694,52 @@ if (dao.insertSystem(system)) {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
          // Verificar que exista un sistema seleccionado
-        int fila = jTable1.getSelectedRow();
+    int fila = jTable1.getSelectedRow();
+    //Verfica si seleccionaste un sistema 
+    if (fila == -1) {
+        JOptionPane.showMessageDialog(this, "Selecciona un sistema");
+        return;
+    }
 
-if (fila == -1) {
-    JOptionPane.showMessageDialog(this, "Selecciona un sistema");
-    return;
-}
-// Verificar que exista un sistema seleccionado
-HydroponicSystem system = new HydroponicSystem();
-// Asignar la información modificada
-system.setSystemId(
-    Integer.parseInt(jTable1.getValueAt(fila, 0).toString())
-);
+    HydroponicSystem system = new HydroponicSystem();
 
-system.setCapacityLiters(
-    Double.parseDouble(txtCapacidad.getText())
-);
+    system.setSystemId(
+        Integer.parseInt(jTable1.getValueAt(fila, 0).toString())
+    );
 
-system.setTypeSystem(
-    jComboBox1.getSelectedItem().toString()
-);
+    system.setCapacityLiters(
+        Double.parseDouble(txtCapacidad.getText())
+    );
 
-system.setUbication(txtUbicacion.getText());
+    system.setTypeSystem(
+        jComboBox1.getSelectedItem().toString()
+    );
+
+    system.setUbication(
+        txtUbicacion.getText()
+    );
+
+
+    HydroponicSystemDAO dao = new HydroponicSystemDAO();
+
+    if (dao.updateSystem(system)) {
+
+        JOptionPane.showMessageDialog(this,
+                "Sistema modificado correctamente.");
+
+        cargarTabla();
+
+        txtID.setText("");
+        txtCapacidad.setText("");
+        txtUbicacion.setText("");
+        jComboBox1.setSelectedIndex(0);
+
+    } else {
+
+        JOptionPane.showMessageDialog(this,
+                "No se pudo modificar el sistema.");
+
+    }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed

@@ -123,19 +123,26 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="homeBtn" max="32767" attributes="0"/>
-                          <Component id="systemBtn" max="32767" attributes="0"/>
-                          <Component id="plantBtn" max="32767" attributes="0"/>
-                          <Component id="loteBtn" max="32767" attributes="0"/>
-                          <Component id="monitoreoBtn" max="32767" attributes="0"/>
-                          <Component id="solutionBtn" max="32767" attributes="0"/>
-                          <Component id="profileBtn" max="32767" attributes="0"/>
-                          <Component id="logoutBtn" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="homeBtn" max="32767" attributes="0"/>
+                                  <Component id="systemBtn" max="32767" attributes="0"/>
+                                  <Component id="plantBtn" max="32767" attributes="0"/>
+                                  <Component id="loteBtn" max="32767" attributes="0"/>
+                                  <Component id="monitoreoBtn" max="32767" attributes="0"/>
+                                  <Component id="solutionBtn" max="32767" attributes="0"/>
+                                  <Component id="profileBtn" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                              <Component id="logoutBtn" min="-2" pref="118" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace pref="45" max="32767" attributes="0"/>
+                      <EmptySpace pref="32" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -156,9 +163,9 @@
                       <Component id="solutionBtn" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="profileBtn" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="logoutBtn" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

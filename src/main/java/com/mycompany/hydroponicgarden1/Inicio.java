@@ -162,6 +162,7 @@ public class Inicio extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         panelMenu = new javax.swing.JPanel();
         homeBtn1 = new javax.swing.JButton();
         systemBtn1 = new javax.swing.JButton();
@@ -182,8 +183,8 @@ public class Inicio extends javax.swing.JFrame {
         headerPanel.setForeground(new java.awt.Color(255, 255, 255));
 
         LabelTitle.setBackground(new java.awt.Color(0, 204, 0));
-        LabelTitle.setFont(new java.awt.Font("Bodoni MT", 3, 24)); // NOI18N
-        LabelTitle.setForeground(new java.awt.Color(0, 204, 51));
+        LabelTitle.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 30)); // NOI18N
+        LabelTitle.setForeground(new java.awt.Color(0, 153, 0));
         LabelTitle.setText("HydroFarm   ");
 
         btnMenu.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
@@ -202,20 +203,20 @@ public class Inicio extends javax.swing.JFrame {
                 .addComponent(btnMenu)
                 .addGap(137, 137, 137)
                 .addComponent(LabelIcon)
-                .addGap(165, 165, 165)
+                .addGap(206, 206, 206)
                 .addComponent(LabelTitle)
-                .addContainerGap(449, Short.MAX_VALUE))
+                .addContainerGap(377, Short.MAX_VALUE))
         );
         headerPanelLayout.setVerticalGroup(
             headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(headerPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(LabelIcon)
                     .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(LabelTitle)
-                        .addComponent(LabelIcon))
-                    .addComponent(btnMenu))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnMenu)
+                        .addComponent(LabelTitle)))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         contentPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -230,7 +231,10 @@ public class Inicio extends javax.swing.JFrame {
         jLabel2.setText("Sistema de gestión y monitoreo para huertos hidropónicos.");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel3.setText("Desde aquí podrás administrar tus cultivos, monitorear sensores, consultar reportes y mucho más.");
+        jLabel3.setText("y mucho más");
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel4.setText("Desde aquí podrás administrar tus cultivos, monitorear sensores, consultar reportes");
 
         javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
@@ -239,9 +243,6 @@ public class Inicio extends javax.swing.JFrame {
             .addGroup(contentPanelLayout.createSequentialGroup()
                 .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(contentPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 697, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(contentPanelLayout.createSequentialGroup()
                         .addGap(103, 103, 103)
                         .addComponent(jLabel2))
                     .addGroup(contentPanelLayout.createSequentialGroup()
@@ -249,6 +250,15 @@ public class Inicio extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(LableImageHome, javax.swing.GroupLayout.PREFERRED_SIZE, 661, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contentPanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(296, 296, 296))
+            .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(contentPanelLayout.createSequentialGroup()
+                    .addGap(16, 16, 16)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 704, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(26, Short.MAX_VALUE)))
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -259,50 +269,66 @@ public class Inicio extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(68, 68, 68)
+                .addComponent(jLabel3)
+                .addContainerGap(89, Short.MAX_VALUE))
+            .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contentPanelLayout.createSequentialGroup()
+                    .addContainerGap(406, Short.MAX_VALUE)
+                    .addComponent(jLabel4)
+                    .addGap(129, 129, 129)))
         );
 
         panelMenu.setBackground(new java.awt.Color(0, 153, 0));
         panelMenu.setPreferredSize(new java.awt.Dimension(180, 305));
 
         homeBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        homeBtn1.setForeground(new java.awt.Color(255, 255, 255));
         homeBtn1.setText("Inicio");
         homeBtn1.setBorderPainted(false);
         homeBtn1.setFocusPainted(false);
 
+        systemBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        systemBtn1.setForeground(new java.awt.Color(255, 255, 255));
         systemBtn1.setText("Sistema Huerto");
         systemBtn1.setBorderPainted(false);
         systemBtn1.setContentAreaFilled(false);
         systemBtn1.setFocusPainted(false);
 
+        plantBtn1.setForeground(new java.awt.Color(255, 255, 255));
         plantBtn1.setText("Plantas");
         plantBtn1.setBorderPainted(false);
         plantBtn1.setContentAreaFilled(false);
         plantBtn1.setFocusPainted(false);
+        plantBtn1.addActionListener(this::plantBtn1ActionPerformed);
 
+        loteBtn1.setForeground(new java.awt.Color(255, 255, 255));
         loteBtn1.setText("Lotes");
         loteBtn1.setBorderPainted(false);
         loteBtn1.setContentAreaFilled(false);
         loteBtn1.setFocusPainted(false);
 
+        monitoreoBtn1.setForeground(new java.awt.Color(255, 255, 255));
         monitoreoBtn1.setText("Monitoreo");
         monitoreoBtn1.setBorderPainted(false);
         monitoreoBtn1.setContentAreaFilled(false);
         monitoreoBtn1.setFocusPainted(false);
 
+        solutionBtn1.setForeground(new java.awt.Color(255, 255, 255));
         solutionBtn1.setText("Solución Nutritiva");
         solutionBtn1.setBorderPainted(false);
         solutionBtn1.setContentAreaFilled(false);
         solutionBtn1.setFocusPainted(false);
+        solutionBtn1.addActionListener(this::solutionBtn1ActionPerformed);
 
+        perfilBtn1.setForeground(new java.awt.Color(255, 255, 255));
         perfilBtn1.setText("Mi Perfil");
         perfilBtn1.setBorderPainted(false);
         perfilBtn1.setContentAreaFilled(false);
         perfilBtn1.setFocusPainted(false);
         perfilBtn1.addActionListener(this::perfilBtn1ActionPerformed);
 
+        CloseBtn1.setForeground(new java.awt.Color(255, 255, 255));
         CloseBtn1.setText("Cerrar Sesión");
         CloseBtn1.setBorderPainted(false);
         CloseBtn1.setContentAreaFilled(false);
@@ -344,9 +370,9 @@ public class Inicio extends javax.swing.JFrame {
                 .addComponent(solutionBtn1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(perfilBtn1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(CloseBtn1)
-                .addGap(0, 299, Short.MAX_VALUE))
+                .addGap(32, 32, 32))
         );
 
         javax.swing.GroupLayout principalPanelLayout = new javax.swing.GroupLayout(principalPanel);
@@ -369,8 +395,8 @@ public class Inicio extends javax.swing.JFrame {
                 .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(principalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE)
-                    .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE))
+                    .addComponent(panelMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                    .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -395,6 +421,14 @@ public class Inicio extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_perfilBtn1ActionPerformed
 
+    private void plantBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plantBtn1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_plantBtn1ActionPerformed
+
+    private void solutionBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_solutionBtn1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_solutionBtn1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -412,6 +446,7 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JButton loteBtn1;
     private javax.swing.JButton monitoreoBtn1;
     private javax.swing.JPanel panelMenu;
