@@ -778,44 +778,52 @@ public class planta extends javax.swing.JFrame {
         panelMenu.setPreferredSize(new java.awt.Dimension(162, 0));
 
         systemBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        systemBtn1.setForeground(new java.awt.Color(255, 255, 255));
         systemBtn1.setText("Sistema Huerto");
         systemBtn1.setBorderPainted(false);
         systemBtn1.setFocusPainted(false);
         systemBtn1.addActionListener(this::systemBtn1ActionPerformed);
 
         plantBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        plantBtn1.setForeground(new java.awt.Color(255, 255, 255));
         plantBtn1.setText("Plantas");
         plantBtn1.setBorderPainted(false);
         plantBtn1.setFocusPainted(false);
 
         perfilBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        perfilBtn1.setForeground(new java.awt.Color(255, 255, 255));
         perfilBtn1.setText("Mi perfil");
         perfilBtn1.setBorderPainted(false);
         perfilBtn1.setFocusPainted(false);
         perfilBtn1.addActionListener(this::perfilBtn1ActionPerformed);
 
         monitoreoBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        monitoreoBtn1.setForeground(new java.awt.Color(255, 255, 255));
         monitoreoBtn1.setText("Monitoreo");
         monitoreoBtn1.setBorderPainted(false);
         monitoreoBtn1.setFocusPainted(false);
 
         solutionBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        solutionBtn1.setForeground(new java.awt.Color(255, 255, 255));
         solutionBtn1.setText("Solucion Nutritiva");
         solutionBtn1.setBorderPainted(false);
         solutionBtn1.setFocusPainted(false);
         solutionBtn1.addActionListener(this::solutionBtn1ActionPerformed);
 
         loteBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        loteBtn1.setForeground(new java.awt.Color(255, 255, 255));
         loteBtn1.setText("Lote");
         loteBtn1.setBorderPainted(false);
         loteBtn1.setFocusPainted(false);
 
         CloseBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        CloseBtn1.setForeground(new java.awt.Color(255, 255, 255));
         CloseBtn1.setText("Cerrar Sesion");
         CloseBtn1.setBorderPainted(false);
         CloseBtn1.setFocusPainted(false);
 
         homeBtn1.setBackground(new java.awt.Color(66, 127, 53));
+        homeBtn1.setForeground(new java.awt.Color(255, 255, 255));
         homeBtn1.setText("Inicio");
         homeBtn1.setBorderPainted(false);
         homeBtn1.setFocusPainted(false);
@@ -854,9 +862,9 @@ public class planta extends javax.swing.JFrame {
                 .addComponent(solutionBtn1)
                 .addGap(18, 18, 18)
                 .addComponent(perfilBtn1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(CloseBtn1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(25, 25, 25))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

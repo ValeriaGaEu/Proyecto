@@ -238,7 +238,7 @@ private void clearFields() {
 
         btnRegister.setBackground(new java.awt.Color(51, 153, 0));
         btnRegister.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btnRegister.setForeground(new java.awt.Color(0, 51, 0));
+        btnRegister.setForeground(new java.awt.Color(255, 255, 255));
         btnRegister.setText("Registrate");
         btnRegister.addActionListener(this::btnRegisterActionPerformed);
 
