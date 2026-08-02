@@ -1,6 +1,6 @@
-# Hydroponic Garden 🌱
+# HYDROFARM 🌱
 
-Hydroponic Garden es un sistema inteligente de gestión para un huerto hidropónico, desarrollado con el objetivo de facilitar el monitoreo, 
+HydroFarm es un sistema inteligente de gestión para un huerto hidropónico, desarrollado con el objetivo de facilitar el monitoreo, 
 administración y control de un sistema de cultivo mediante herramientas tecnológicas. Este proyecto fue creado en Java e integra una base 
 de datos para almacenar y gestionar información importante sobre usuarios, plantas, sistemas hidropónicos, soluciones nutritivas y registros 
 de monitoreo.
